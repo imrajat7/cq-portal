@@ -72,4 +72,20 @@ form{
     margin-top: 25px;
     border-radius: 5px;
     cursor: pointer;
+    transition-durat: 500ms;
+}
+#login_button:hover{
+    background:#34DC50;
+    color: black;
+    transition-duration: 500ms;
+    transform: scale(1.1);
+}
+@media only screen and (max-width: 600px) {
+    #body_inner_div{
+        width: 90vw;
+        left:5vw;
+        }
+    #login_body_text{
+        font-size: 25px;
+    }
 }
