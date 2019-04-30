@@ -5,7 +5,7 @@ var session = require('express-session');
 
 //Access Static files
 app.use(express.static(path.join(__dirname,'public')));
-
+app.set('view engine', 'ejs');
 //BodyParser
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -42,18 +42,24 @@ app.post('/login',function(req,res){
         password: req.body.passWord
     }).exec(function(error,data){
         console.log(data);
+        req.session.data = data;
         res.send(data);
     });
 });
 
-app.use('/login',function(req,res,next){
+app.get("/home", function(req, res) {
+    res.render('homepage', {data: req.session.data});
+})
+
+app.get('/login',function(req,res,next){
+    console.log("helo wordls")
     if(req.session.isLogin){
-        console.log('Already loggedin');
+        req.session.isLogin = 0;
+       res.render('homepage', {data: req.session.data});
     } else {
         //Ask for id password
         req.session.isLogin = 1;
-        console.log("login set bt middleware");
-        res.send("Welcome");
+        res.sendFile(path.join(__dirname,'public', 'login.html'));
     }
     next();
 });

@@ -72,7 +72,6 @@ form{
     margin-top: 25px;
     border-radius: 5px;
     cursor: pointer;
-    transition-durat: 500ms;
 }
 #login_button:hover{
     background:#34DC50;

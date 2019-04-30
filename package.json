@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/imrajat7/cq-portal/issues"
   },
-  "homepage": "https://github.com/imrajat7/cq-portal#readme"
+  "homepage": "https://github.com/imrajat7/cq-portal#readme",
+  "dependencies": {
+    "ejs": "^2.6.1"
+  }
 }
