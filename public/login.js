@@ -22,7 +22,7 @@ loginBtn.addEventListener('click',function(event){
                 passWord.value="";
             } else {
                 console.log(dataReturned);
-                location.href = "/home"
+                window.location = dataReturned[0].role + "/profile";
             }
         }
     }
