@@ -60,6 +60,10 @@ app.get('/changePassword',function(req,res){
     res.render('changepassword',{data: req.session.data});
 });
 
+app.get('/user/adduser',function(req,res){
+    res.render('adduser',{data: req.session.data});
+});
+
 app.get('/',function(req,res,next){
     if(req.session.isLogin){
         console.log("Already Logged in");

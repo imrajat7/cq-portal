@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Dashboard</title>
+    <title>AddUser</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -80,88 +80,49 @@
             height:100%;
             width: 10%;
         }
-        #body_internal_div{
-            float: left;
-            margin-left:12%;
-            margin-top: 2%;
-            transition-duration: 700ms;
-            height: 550px;
-            width: 70%;
-            border: 1px solid #eeeeee;
-            box-shadow: 0px 1px 10px 0px rgb(201, 201, 201);
-        }
-        #body_internal_profile_div{
-            width: 100%;
-            height:30%;
-            line-height: 30%;
-        }
-        #user_icon{
-            padding: 25px;
-            font-size: 100px;
-        }
-        #fields_outer_div{
-            height:70%;
-            width: 100%;
-        }
-        .outer_div{
-            height:22%;
-            margin-left:2%;
-            margin-top: 3%;
-            width:47%;
-            text-align: center;
-            float: left;
-            border: 1px solid rgb(211, 211, 211);
-            box-shadow: 0px 2px 10px 0px rgb(201, 201, 201);
-        }
-        .div_inner_1{
-            background:#e9e9e9;
-            border-bottom: 1px solid rgb(211, 211, 211);
-            height:55%;
-            font-size: 15px;
-            line-height: 3em;
-            text-align: left;
-            padding-left: 3%;
-        }
-        .div_inner_2{
-            height:45%;
-            padding-left: 3%;
-            line-height: 2em;
-            text-align: left;
-        }
         .active{
             background: #51a1e2 !important;
+        }
+        #body_internal_div{
+            width:40vw;
+            height: 570px;
+            background: #fff;
+            margin-left: 31%;
+            margin-top: 2%;
+            border: 5px solid rgba(0,0,0,0.1);
+            color: #333;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        h1{
+            margin-bottom: 10px;
+            font-weight: 500;
+            background: orange;
+        }
+        input{
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <% include partials/menu.html %>
     <div id="body_internal_div">
-        <div id="body_internal_profile_div"><span><i class="far fa-user" id="user_icon"></i></span></div>
-        <div id="fields_outer_div">
-            <div class="outer_div">
-                <div class="div_inner_1"><span class="spans">Email</span></div>
-                <div class="div_inner_2"><%=data[0].email%></div>
-            </div>
-            <div class="outer_div">
-                <div class="div_inner_1">Gender</div>
-                <div class="div_inner_2"><%=data[0].gender%></div>
-            </div>
-            <div class="outer_div">
-                <div class="div_inner_1">Name</div>
-                <div class="div_inner_2"><%=data[0].name%></div>
-            </div>
-            <div class="outer_div">
-                <div class="div_inner_1">City</div>
-                <div class="div_inner_2"><%=data[0].city%></div>
-            </div>
-            <div class="outer_div">
-                <div class="div_inner_1">D.O.B</div>
-                <div class="div_inner_2"><%=data[0].dob%></div>
-            </div>
-            <div class="outer_div">
-                <div class="div_inner_1">Phone</div>
-                <div class="div_inner_2"><%=data[0].phoneno%></div>
-            </div>
+        <div id="adduser_heading"><h1>Add User</h1></div>
+        <div id="adduser_form_div">
+            <form>
+                <input type="text" placeholder="Name">
+                <input type="text" placeholder="Email">
+                <input type="text" placeholder="User Password">
+                <input type="number" placeholder="Phone">
+                <input type="text" placeholder="City">
+                <label>Role:</label><br>
+                <select>
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="opel">Opel</option>
+                    <option value="audi">Audi</option>
+                </select>
+            </form>
         </div>
     </div>
 </body>
@@ -175,7 +136,7 @@
         div[i].classList.remove("active");
     }
     
-    div[1].classList.add("active");
+    div[2].classList.add("active");
     
     //Buttons on Left Navigation Drawer
     var profile_button = document.getElementById('profile_button');
@@ -191,15 +152,15 @@
 	sideBtn.addEventListener("click", function () {
 		if(menu.style.width == '300px') {
             menu.style.width = '50px';
-            body_internal_div.style.marginLeft = '12%';
-            body_internal_div.style.marginTop = '2%';
+            // body_internal_div.style.marginLeft = '12%';
+            // body_internal_div.style.marginTop = '2%';
 			for(var i = 0;i<span.length;i++) {
 				span[i].style.display = 'none';
 			}
 		} else {
             menu.style.width = '300px';
-            body_internal_div.style.marginLeft = '4%';
-            body_internal_div.style.marginTop = '1.5%';
+            // body_internal_div.style.marginLeft = '4%';
+            // body_internal_div.style.marginTop = '1.5%';
 			setTimeout(function () {
 				for(var i = 0;i<span.length;i++) {
 					span[i].style.display = 'inline';
@@ -207,13 +168,9 @@
 			}, 210);
 		}
     })
-    
-    change_password_button.addEventListener('click',function(event){
-        window.location = '/changePassword';
-    });
 
-    add_user_button.addEventListener('click',function(event){
-        window.location = '/<%= data[0].role%>/adduser';
+    profile_button.addEventListener('click',function(event){
+        window.location = '/<%= data[0].role%>/profile';
     });
 
 </script>
