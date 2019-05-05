@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Dashboard</title>
+    <title>editProfile</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -11,6 +11,7 @@
     <style>
         body {
 			margin: 0;
+            background: teal;
             padding: 0;
             background: #f5f5f5;
             font-family: 'Roboto', sans-serif;
@@ -80,88 +81,24 @@
             height:100%;
             width: 10%;
         }
-        #change_password_outerdiv{
-            margin-top: 30px;
-            margin-left: 30%;
-            min-height: 320px;
-            height: auto;
-            max-width: 40%;
-            width: auto;
-            transition-duration: 700ms;
-            border: 5px solid rgba(0,0,0,0.1);
-            padding: 25px;
-            background: #fff;
-            color: #333;
-        }
-        div h1{
-            margin:0;
-            font-size: 2em;
-            margin-top: 15px;
-            font-weight: 500;
-        }
-        *{
-            box-sizing: border-box;
-        }
-        div label{
-            transform: translateY(-50%,-50%);
-            font-weight: 600;
-            display: inline-block;
-            width: 100%;
-            margin-top: 15px;
-            cursor: default;
-            box-sizing: border-box;
-        }
-        div input{
-            width:100%;
-            margin-top: 7px;
-            font-size: 1em;
-            height:30px;
-            padding:1px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        div button{
-            margin-top: 30px;
-            padding: 9px 13px;
-            background: #4cae4c;
-            border:0;
-            border-color: #449d44;
-            color: #fff;
-        }
-        div button:hover{
-            background: #449d44;
-        }
-        .active{
-            background: #51a1e2 !important;
-        }
     </style>
 </head>
 <body>
     <% include partials/menu.html %>
-    <div id="change_password_outerdiv">
-        <h1>Change Password</h1>
-        <form>
-            <label>Old Password:</label>
-            <input id="oldPassword" type="text">
-            <label>New Password:</label>
-            <input id="newPassword" type="password"><br>
-            <button type="submit" id="submit_button">Submit</button>
-        </form>
-    </div>
+    Hello World
 </body>
 <script>
-var menu = document.getElementById("menu");
+    var menu = document.getElementById("menu");
     var sideBtn = document.getElementById("sideBtn");
-    var body_internal_div = document.getElementById("change_password_outerdiv");
+    var body_internal_div = document.getElementById("body_internal_div");
     var span = menu.getElementsByTagName("span");
     var div = menu.getElementsByTagName('div');
-    var submit_button = document.getElementById("submit_button");
     for(var i=0;i<div.length;i++){
         div[i].classList.remove("active");
     }
     
-    div[7].classList.add("active");
-
+    div[1].classList.add("active");
+    
     //Buttons on Left Navigation Drawer
     var profile_button = document.getElementById('profile_button');
     var add_user_button = document.getElementById('add_user_button');
@@ -171,18 +108,19 @@ var menu = document.getElementById("menu");
     var tag_panel_button = document.getElementById('tag_pane_button');
     var change_password_button = document.getElementById('change_password_button');
     var logout_button = document.getElementById('logout_button');
+    
 
 	sideBtn.addEventListener("click", function () {
 		if(menu.style.width == '300px') {
             menu.style.width = '50px';
-            body_internal_div.style.marginLeft = '30%';
+            body_internal_div.style.marginLeft = '12%';
             body_internal_div.style.marginTop = '2%';
 			for(var i = 0;i<span.length;i++) {
 				span[i].style.display = 'none';
 			}
 		} else {
             menu.style.width = '300px';
-            body_internal_div.style.marginLeft = '40%';
+            body_internal_div.style.marginLeft = '4%';
             body_internal_div.style.marginTop = '1.5%';
 			setTimeout(function () {
 				for(var i = 0;i<span.length;i++) {
@@ -191,35 +129,17 @@ var menu = document.getElementById("menu");
 			}, 210);
 		}
     })
-    
-    profile_button.addEventListener('click',function(event){
-        window.location = '/<%= data[0].role%>/profile';
+
+    profile_button.addEventListener("click",function(event){
+        window.location = '/profile'
+    })
+
+    change_password_button.addEventListener('click',function(event){
+        window.location = '/changePassword';
     });
 
-
-    //Submit Button Listener to verify password in the database.
-    submit_button.addEventListener('click',function(event){
-        var email = 'rajat@gmail.com';
-        var oldPassword = document.getElementById('oldPassword').value;
-        var newPassword = document.getElementById('newPassword').value;
-        var password = new Object();
-        password._id = '<%= data[0]._id%>';
-        password.oldPassword = oldPassword;
-        password.newPassword = newPassword;
-        var request = new XMLHttpRequest();
-        request.open('PUT','/changePassword');
-        request.setRequestHeader('Content-Type',"application/json");
-        request.send(JSON.stringify(password));
-        request.onload = function(){
-            var dataReturned = request.responseText;
-            if(dataReturned == ""){
-                alert('You entered wrong old password');
-            }
-            else {
-                console.log(dataReturned);
-                alert('Password changed successfully');
-            }
-        }
+    add_user_button.addEventListener('click',function(event){
+        window.location = '/<%= data[0].role%>/adduser';
     });
 
 </script>

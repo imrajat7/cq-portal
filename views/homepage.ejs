@@ -45,7 +45,7 @@
 			padding: 15px;
         }
 		#menu {
-			background-color: #222D3C;
+			background-color:#000;
 			width: 50px;
 			transition-property: width;
 			transition-duration: 0.7s;
@@ -131,6 +131,9 @@
         .active{
             background: #51a1e2 !important;
         }
+        #profile_button{
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -176,6 +179,8 @@
     }
     
     div[1].classList.add("active");
+
+    var profile_button = document.getElementById("profile");
     
     //Buttons on Left Navigation Drawer
     var profile_button = document.getElementById('profile_button');
@@ -206,6 +211,10 @@
 				}
 			}, 210);
 		}
+    })
+
+    profile_button.addEventListener("click",function(event){
+        window.location = '/profile'
     })
     
     change_password_button.addEventListener('click',function(event){

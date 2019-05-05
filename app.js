@@ -52,7 +52,7 @@ app.post('/login',function(req,res){
     });
 });
 
-app.get("/user/profile", function(req, res) {
+app.get("/admin/profile", function(req, res) {
     res.render('homepage', {data: req.session.data});
 })
 
@@ -60,11 +60,11 @@ app.get('/changePassword',function(req,res){
     res.render('changepassword',{data: req.session.data});
 });
 
-app.get('/user/adduser',function(req,res){
+app.get('/admin/adduser',function(req,res){
     res.render('adduser',{data: req.session.data});
 });
 
-app.get('/',function(req,res,next){
+app.get('/',function(req,res){
     if(req.session.isLogin){
         console.log("Already Logged in");
         res.render('homepage',{data: req.session.data});
@@ -73,6 +73,14 @@ app.get('/',function(req,res,next){
         res.sendFile(path.join(__dirname,'public','login.html'));
     }
 });
+
+app.get('/profile',function(req,res){
+    res.render('profile',{data: req.session.data});
+})
+
+app.get('/editProfile',function(req,res){
+    res.render('editprofile',{data: req.session.data});
+})
 
 //Function to update the password
 app.put('/changePassword',function(req,res){
@@ -98,6 +106,31 @@ app.put('/changePassword',function(req,res){
             res.send(error)
           })
 });
+
+//Function to add in the database
+app.post('/admin/adduser',function (req, res) {
+    console.log(req.body);
+    let newUser = new userdetails({
+        name: req.body.name,
+	    email: req.body.email,
+	    password: req.body.password,
+	    city: req.body.city,
+	    phoneno: req.body.phoneno, 
+	    gender: "male",
+	    dob: "11/08/1999",
+	    role: "admin"
+    })
+    newUser.save()
+     .then(data => {
+       console.log(data)
+       res.send(data)
+     })
+     .catch(err => {
+       console.error(err)
+       res.send(error)
+     })
+    
+  })
 
 app.listen(8000);
 
