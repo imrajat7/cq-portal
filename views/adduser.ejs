@@ -99,7 +99,7 @@
             font-weight: 500;
         }
         input,select{
-            width: 100%;
+            width: 98%;
             height: 34px;
             display: block;
             font-size: 14px;
@@ -187,14 +187,16 @@
     }
     
     div[2].classList.add("active");
+
+    var profile_button = document.getElementById("profile_button");
     
     //Buttons on Left Navigation Drawer
-    var profile_button = document.getElementById('profile_button');
-    var add_user_button = document.getElementById('add_user_button');
+    var profile_button_left = document.getElementById('profile_button_left');
+    var add_user_button_left = document.getElementById('add_user_button_left');
     var user_list_button = document.getElementById('user_list_button');
     var community_list_button = document.getElementById('community_list_button');
     var switch_user_button = document.getElementById('switch_user_button');
-    var tag_panel_button = document.getElementById('tag_pane_button');
+    var tag_panel_button = document.getElementById('tag_panel_button');
     var change_password_button = document.getElementById('change_password_button');
     var logout_button = document.getElementById('logout_button');
 
@@ -223,11 +225,27 @@
 		}
     })
 
+    profile_button.addEventListener("click",function(event){
+        window.location = '/profile'
+    })
+
+    profile_button_left.addEventListener("click",function(event){
+        window.location = '/<%= data[0].role%>/profile'
+    });
+
     add_user_button.addEventListener("click",function(event){
     });
 
-    profile_button.addEventListener('click',function(event){
-        window.location = '/<%= data[0].role%>/profile';
+    change_password_button.addEventListener('click',function(event){
+        window.location = '/changePassword';
+    });
+
+    add_user_button_left.addEventListener('click',function(event){
+        window.location = '/<%= data[0].role%>/adduser';
+    });
+
+    tag_panel_button.addEventListener("click",function(event){
+        window.location = '/tag';
     });
 
 </script>

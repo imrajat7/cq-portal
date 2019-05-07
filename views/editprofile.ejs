@@ -81,6 +81,12 @@
             height:100%;
             width: 10%;
         }
+        .active{
+            background: #51a1e2 !important;
+        }
+        #profile_button{
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -98,14 +104,16 @@
     }
     
     div[1].classList.add("active");
+
+    var profile_button = document.getElementById("profile_button");
     
     //Buttons on Left Navigation Drawer
-    var profile_button = document.getElementById('profile_button');
-    var add_user_button = document.getElementById('add_user_button');
+    var profile_button_left = document.getElementById('profile_button_left');
+    var add_user_button_left = document.getElementById('add_user_button_left');
     var user_list_button = document.getElementById('user_list_button');
     var community_list_button = document.getElementById('community_list_button');
     var switch_user_button = document.getElementById('switch_user_button');
-    var tag_panel_button = document.getElementById('tag_pane_button');
+    var tag_panel_button = document.getElementById('tag_panel_button');
     var change_password_button = document.getElementById('change_password_button');
     var logout_button = document.getElementById('logout_button');
     
@@ -138,9 +146,18 @@
         window.location = '/changePassword';
     });
 
-    add_user_button.addEventListener('click',function(event){
+    add_user_button_left.addEventListener('click',function(event){
         window.location = '/<%= data[0].role%>/adduser';
     });
+
+    profile_button_left.addEventListener("click",function(event){
+        window.location = '/<%= data[0].role%>/profile';
+    });
+
+    tag_panel_button.addEventListener("click",function(event){
+        window.location = '/tag';
+    });
+    
 
 </script>
 </html>

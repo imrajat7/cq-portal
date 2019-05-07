@@ -64,6 +64,10 @@ app.get('/admin/adduser',function(req,res){
     res.render('adduser',{data: req.session.data});
 });
 
+app.get('/tag',function(req,res){
+    res.render('tag',{data: req.session.data});
+});
+
 app.get('/',function(req,res){
     if(req.session.isLogin){
         console.log("Already Logged in");
