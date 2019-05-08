@@ -52,6 +52,10 @@ app.post('/login',function(req,res){
     });
 });
 
+app.get("/admin/userlist",function(req,res){
+    res.render('userlist',{data: req.session.data});
+});
+
 app.get("/admin/profile", function(req, res) {
     res.render('homepage', {data: req.session.data});
 })
