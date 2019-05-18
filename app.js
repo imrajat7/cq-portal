@@ -73,6 +73,7 @@ app.get('/tag',function(req,res){
 });
 
 app.get('/',function(req,res){
+    console.log(req.body);
     if(req.session.isLogin){
         console.log("Already Logged in");
         res.render('homepage',{data: req.session.data});
