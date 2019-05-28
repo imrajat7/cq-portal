@@ -12,35 +12,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+    *{
+        box-sizing: border-box;
+    }
         body {
 			margin: 0;
             padding: 0;
+            width: 100%;
             background: #f5f5f5;
             font-family: 'Roboto', sans-serif;
 		}
 		nav {
+            position: absolute;
             width:100%;
-            height: 8vh;
+            height: 60px;
 			background-color: #222D3C;
             color: #fff;
+            z-index: 99999999;
 		}
 		nav p {
 			margin: 0;
-			font-size: 30px;
-			padding: 10px;
-			float: left;
+            float: left;
+            height: 50px;
+            padding: 15px 15px;
+			font-size: 20px;
+            line-height: 20px;
+            font-weight: bold;
 		}
 		nav span {
+            float: right;
             padding: .2em .6em .3em;
+            margin-top: 22px;
+            margin-left: 5px;
             font-size: 75%;
-            font-weight: 500;
+            line-height: 1;
+            font-weight: 700;
             color: #fff;
-            margin-top: 2.5vh;
-            margin-left: 1vh;
             font-size: 14px;
             vertical-align: center;
             border-radius: .25em;
-            float: right;
+            vertical-align: baseline;
 		}
 		nav img {
 			float: right;
@@ -48,13 +59,13 @@
 			padding: 15px;
         }
 		#menu {
-			background-color:#000;
-			width: 50px;
-			transition-property: width;
-			transition-duration: 0.7s;
+            padding-top: 60px;
+            background-color: #000;
+            width: 50px;
+            height: 100vh;
+            color: white;
             box-sizing: border-box;
-            float: left;
-            height:92vh;
+            overflow: hidden;
 		}
 		.fa {
 			color: #fff;
@@ -64,10 +75,8 @@
 			margin-left: 11px;
 			box-sizing: border-box;
 		}
-		#menu span {
-			display: none;
-		}
 		.menu-item {
+            width: 250px;
 			cursor: pointer;
 			opacity: 0.8;
 			color: #fff;
@@ -84,12 +93,15 @@
             width: 10%;
         }
         #body_internal_div{
-            float: left;
-            margin-left:12%;
-            margin-top: 2%;
-            transition-duration: 700ms;
-            height: 550px;
+            position: absolute;
+            left: 15%;
             width: 70%;
+            height: 550px;
+            right: 0;
+            top: 10%;
+            bottom: 0;
+            margin-left: 1%;
+            overflow: auto;
             border: 1px solid #eeeeee;
             box-shadow: 0px 1px 10px 0px rgb(201, 201, 201);
         }
@@ -101,6 +113,9 @@
         #user_icon{
             padding: 25px;
             font-size: 100px;
+        }
+        .active{
+            background: #51a1e2 !important;
         }
         #fields_outer_div{
             height:70%;
@@ -130,9 +145,6 @@
             padding-left: 3%;
             line-height: 2em;
             text-align: left;
-        }
-        .active{
-            background: #51a1e2 !important;
         }
         #profile_button{
             cursor: pointer;
@@ -196,25 +208,37 @@
     var logout_button = document.getElementById('logout_button');
 
 
-	sideBtn.addEventListener("click", function () {
-		if(menu.style.width == '300px') {
-            menu.style.width = '50px';
-            body_internal_div.style.marginLeft = '12%';
-            body_internal_div.style.marginTop = '2%';
-			for(var i = 0;i<span.length;i++) {
-				span[i].style.display = 'none';
-			}
-		} else {
-            menu.style.width = '300px';
-            body_internal_div.style.marginLeft = '4%';
-            body_internal_div.style.marginTop = '1.5%';
-			setTimeout(function () {
-				for(var i = 0;i<span.length;i++) {
-					span[i].style.display = 'inline';
-				}
-			}, 210);
-		}
-    })
+    $(document).ready(function(){
+      $("#sideBtn").click(function(){
+         if($("#menu").width() == 50){
+            $("#menu").animate({width: '250px'},400);
+            $("#body_internal_div").animate({left:'500px'},400);
+         } else{
+            $("#menu").animate({width: '50px'},400);
+            $("#body_internal_div").animate({left:'250px'},400);
+            }
+        });
+    });
+
+	// sideBtn.addEventListener("click", function () {
+	// 	if(menu.style.width == '300px') {
+    //         menu.style.width = '50px';
+    //         body_internal_div.style.marginLeft = '12%';
+    //         body_internal_div.style.marginTop = '2%';
+	// 		for(var i = 0;i<span.length;i++) {
+	// 			span[i].style.display = 'none';
+	// 		}
+	// 	} else {
+    //         menu.style.width = '300px';
+    //         body_internal_div.style.marginLeft = '4%';
+    //         body_internal_div.style.marginTop = '1.5%';
+	// 		setTimeout(function () {
+	// 			for(var i = 0;i<span.length;i++) {
+	// 				span[i].style.display = 'inline';
+	// 			}
+	// 		}, 210);
+	// 	}
+    // })
 
     profile_button.addEventListener("click",function(event){
         window.location = '/profile'
@@ -254,7 +278,7 @@
                 var data = new Object();
                 data.logout = 1;
                 var request = new XMLHttpRequest();
-                request.open("GET",'/');
+                request.open("POST",'/logout');
                 request.setRequestHeader("Content-Type","application/json");
                 request.send(JSON.stringify(data));
                 },

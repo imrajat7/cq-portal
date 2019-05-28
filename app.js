@@ -73,12 +73,20 @@ app.get('/tag',function(req,res){
 });
 
 app.get('/',function(req,res){
-    console.log(req.body);
     if(req.session.isLogin){
         console.log("Already Logged in");
         res.render('homepage',{data: req.session.data});
     } else {
         console.log("New User");
+        res.sendFile(path.join(__dirname,'public','login.html'));
+    }
+});
+
+app.post('/logout',function(req,res){
+    if(req.body.logout){
+        req.session.userName = "";
+        req.session.password = "";
+        req.session.data = "";
         res.sendFile(path.join(__dirname,'public','login.html'));
     }
 });
