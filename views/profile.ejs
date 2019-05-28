@@ -5,40 +5,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Profile</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        *{
+            box-sizing: border-box;
+        }
         body {
 			margin: 0;
-            background: teal;
-            padding: 0;
+            padding:0;
+            width:100%;
             background: #f5f5f5;
             font-family: 'Roboto', sans-serif;
 		}
 		nav {
+            position: absolute;
             width:100%;
-            height: 8vh;
+            height: 60px;
 			background-color: #222D3C;
             color: #fff;
+            z-index: 99999999;
 		}
 		nav p {
-			margin: 0;
-			font-size: 30px;
-			padding: 10px;
-			float: left;
+            margin: 0;
+            float: left;
+            height: 50px;
+            padding: 15px 15px;
+			font-size: 20px;
+            line-height: 20px;
+            font-weight: bold;
 		}
 		nav span {
+            float: right;
             padding: .2em .6em .3em;
+            margin-top: 22px;
+            margin-left: 5px;
             font-size: 75%;
-            font-weight: 500;
+            line-height: 1;
+            font-weight: 700;
             color: #fff;
-            margin-top: 2.5vh;
-            margin-left: 1vh;
             font-size: 14px;
             vertical-align: center;
             border-radius: .25em;
-            float: right;
+            vertical-align: baseline;
 		}
 		nav img {
 			float: right;
@@ -46,13 +59,13 @@
 			padding: 15px;
         }
 		#menu {
-			background-color: #000;
-			width: 50px;
-			transition-property: width;
-			transition-duration: 0.7s;
+			padding-top: 60px;
+            background-color: #000;
+            width: 50px;
+            height: 100vh;
+            color: white;
             box-sizing: border-box;
-            float: left;
-            height:92vh;
+            overflow: hidden;
 		}
 		.fa {
 			color: #fff;
@@ -62,15 +75,14 @@
 			margin-left: 11px;
 			box-sizing: border-box;
 		}
-		#menu span {
-			display: none;
-		}
 		.menu-item {
+			width: 250px;
 			cursor: pointer;
 			opacity: 0.8;
 			color: #fff;
 			font-family: sans-serif;
 			font-size: 14px;
+            padding-top: 10px;
 		}
 		.menu-item:hover {
 			border-left: 2px solid red;
@@ -82,12 +94,11 @@
             width: 10%;
         }
         #body_internal_div{
-            float: left;
-            margin-left:12%;
-            margin-top: 2%;
-            transition-duration: 700ms;
+            position: absolute;
+            left: 14%;
+            top: 12%;
+            width: 72%;
             height: 550px;
-            width: 70%;
             border: 1px solid #eeeeee;
             box-shadow: 0px 1px 10px 0px rgb(201, 201, 201);
         }
@@ -223,25 +234,17 @@
 
     var edit_button = document.getElementById("edit_button");
 
-	sideBtn.addEventListener("click", function () {
-		if(menu.style.width == '300px') {
-            menu.style.width = '50px';
-            body_internal_div.style.marginLeft = '12%';
-            body_internal_div.style.marginTop = '2%';
-			for(var i = 0;i<span.length;i++) {
-				span[i].style.display = 'none';
-			}
-		} else {
-            menu.style.width = '300px';
-            body_internal_div.style.marginLeft = '4%';
-            body_internal_div.style.marginTop = '1.5%';
-			setTimeout(function () {
-				for(var i = 0;i<span.length;i++) {
-					span[i].style.display = 'inline';
-				}
-			}, 210);
-		}
-    })
+	$(document).ready(function(){
+      $("#sideBtn").click(function(){
+         if($("#menu").width() == 50){
+            $("#menu").animate({width: '250px'},400);
+            $("#body_internal_div").animate({left:'20%'},400);
+         } else{
+            $("#menu").animate({width: '50px'},400);
+            $("#body_internal_div").animate({left:'14%'},400);
+            }
+        });
+    });
     
     profile_button.addEventListener("click",function(event){
         window.location = '/profile'
@@ -269,6 +272,31 @@
 
     user_list_button.addEventListener("click",function(event){
         window.location = '/<%=data[0].role%>/userlist';
+    });
+
+    logout_button.addEventListener("click",function(event){
+        $.confirm({
+            title: 'Confirm Logout',
+            boxWidth: '20%',
+            theme: 'supervan',
+            backgroundDismissAnimation: 'random',
+            useBootstrap: false,
+            content: 'Do you really want logout?',
+            buttons: {
+                Yes: function () {
+                // $.alert('Yes');
+                var data = new Object();
+                data.logout = 1;
+                var request = new XMLHttpRequest();
+                request.open("POST",'/logout');
+                request.setRequestHeader("Content-Type","application/json");
+                request.send(JSON.stringify(data));
+                },
+                No: function () {
+                // $.alert('No');
+                }
+            }
+        });
     });
 
 </script>

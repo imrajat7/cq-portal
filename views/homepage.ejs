@@ -82,6 +82,7 @@
 			color: #fff;
 			font-family: sans-serif;
 			font-size: 14px;
+            padding-top: 10px;
 		}
 		.menu-item:hover {
 			border-left: 2px solid red;
@@ -94,13 +95,10 @@
         }
         #body_internal_div{
             position: absolute;
-            left: 15%;
-            width: 70%;
+            left: 14%;
+            top: 12%;
+            width: 72%;
             height: 550px;
-            right: 0;
-            top: 10%;
-            bottom: 0;
-            margin-left: 1%;
             overflow: auto;
             border: 1px solid #eeeeee;
             box-shadow: 0px 1px 10px 0px rgb(201, 201, 201);
@@ -212,33 +210,13 @@
       $("#sideBtn").click(function(){
          if($("#menu").width() == 50){
             $("#menu").animate({width: '250px'},400);
-            $("#body_internal_div").animate({left:'500px'},400);
+            $("#body_internal_div").animate({left:'20%'},400);
          } else{
             $("#menu").animate({width: '50px'},400);
-            $("#body_internal_div").animate({left:'250px'},400);
+            $("#body_internal_div").animate({left:'14%'},400);
             }
         });
     });
-
-	// sideBtn.addEventListener("click", function () {
-	// 	if(menu.style.width == '300px') {
-    //         menu.style.width = '50px';
-    //         body_internal_div.style.marginLeft = '12%';
-    //         body_internal_div.style.marginTop = '2%';
-	// 		for(var i = 0;i<span.length;i++) {
-	// 			span[i].style.display = 'none';
-	// 		}
-	// 	} else {
-    //         menu.style.width = '300px';
-    //         body_internal_div.style.marginLeft = '4%';
-    //         body_internal_div.style.marginTop = '1.5%';
-	// 		setTimeout(function () {
-	// 			for(var i = 0;i<span.length;i++) {
-	// 				span[i].style.display = 'inline';
-	// 			}
-	// 		}, 210);
-	// 	}
-    // })
 
     profile_button.addEventListener("click",function(event){
         window.location = '/profile'
