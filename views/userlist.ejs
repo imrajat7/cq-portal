@@ -118,102 +118,100 @@
         table{
             min-width: 50%;
             width: auto;
-            height: 600px;
+            height: 500px;
         }
+        #tag {
+			width: 100px;
+			background-color: #2D312C;
+			color: #fff;
+			text-align: center;
+			padding: 6px;
+			border-radius: 4px;
+			box-shadow: 1px 1px 1px #2D312C, -1px -1px 1px #2D312C;
+		}
+		#refresh {
+			background-color: #2D312C;
+			width: 100px;
+			font-size: 18px;
+			padding: 6px;
+			text-align: center;
+			float: right;
+			cursor: pointer;
+		}
+		#head-btns {
+			padding-top: 5px;
+		}
+		#filter {
+			width: 150px;
+			background-color: #2D312C;
+			color: white;
+			height: 35px;
+			border-radius: 5px;
+			padding-left: 10px;
+			margin-right: 10px;
+			float: right;
+		}
+		#role {
+			background-color: #2D312C;
+			width: 200px;
+			color: white;
+			height: 35px;
+			padding-left: 10px;
+			border-radius: 5px;
+			float: right;
+		}
+		.actions-btn {
+			width: 35px;
+			height: 35px;
+			margin: 5px 5px 0;
+			padding: 5px;
+		}
+		.actions-btn span {
+			color: #fff;
+			font-size: 15px;
+			width: auto;
+			margin: 0;
+			box-sizing: initial;
+		}
     </style>
 </head>
 <body>
     <% include partials/menu.html %>
     <div id="body_div">
-            <table id="example" class="display" style="width:100%">
-                    <thead>
-                       <tr>
-                          <th>Name</th>
-                          <th>Position</th>
-                          <th>Office</th>
-                          <th>Age</th>
-                          <th>Start date</th>
-                          <th>Salary</th>
-                       </tr>
-                    </thead>
-                    <tbody>
-                       <tr>
-                          <td>Tiger Nixon</td>
-                          <td>System Architect</td>
-                          <td>Edinburgh</td>
-                          <td>61</td>
-                          <td>2011/04/25</td>
-                          <td>$320,800</td>
-                       </tr>
-                       <tr>
-                          <td>Garrett Winters</td>
-                          <td>Accountant</td>
-                          <td>Tokyo</td>
-                          <td>63</td>
-                          <td>2011/07/25</td>
-                          <td>$170,750</td>
-                       </tr>
-                       <tr>
-                          <td>Ashton Cox</td>
-                          <td>Junior Technical Author</td>
-                          <td>San Francisco</td>
-                          <td>66</td>
-                          <td>2009/01/12</td>
-                          <td>$86,000</td>
-                       </tr>
-                       <tr>
-                          <td>Cedric Kelly</td>
-                          <td>Senior Javascript Developer</td>
-                          <td>Edinburgh</td>
-                          <td>22</td>
-                          <td>2012/03/29</td>
-                          <td>$433,060</td>
-                       </tr>
-                       <tr>
-                          <td>Airi Satou</td>
-                          <td>Accountant</td>
-                          <td>Tokyo</td>
-                          <td>33</td>
-                          <td>2008/11/28</td>
-                          <td>$162,700</td>
-                       </tr>
-                       <tr>
-                          <td>Brielle Williamson</td>
-                          <td>Integration Specialist</td>
-                          <td>New York</td>
-                          <td>61</td>
-                          <td>2012/12/02</td>
-                          <td>$372,000</td>
-                       </tr>
-                       <tr>
-                          <td>Herrod Chandler</td>
-                          <td>Sales Assistant</td>
-                          <td>San Francisco</td>
-                          <td>59</td>
-                          <td>2012/08/06</td>
-                          <td>$137,500</td>
-                       </tr>
-                       <tr>
-                          <td>Rhona Davidson</td>
-                          <td>Integration Specialist</td>
-                          <td>Tokyo</td>
-                          <td>55</td>
-                          <td>2010/10/14</td>
-                          <td>$327,900</td>
-                       </tr>
-                       <tr>
-                          <td>Colleen Hurst</td>
-                          <td>Javascript Developer</td>
-                          <td>San Francisco</td>
-                          <td>39</td>
-                          <td>2009/09/15</td>
-                          <td>$205,500</td>
-                       </tr>
-                    </tbody>
-                 </table>
+        <div id="head-btns">
+                <span id="tag">User List</span>
+                <select id="role">
+                    <option value="All">All</option>
+                    <option value="Admins">Admins</option>
+                    <option value="Users">Users</option>
+                    <option value="Community Builder">Community Builder</option>
+                </select>
+                <select id="filter">
+                    <option value="All">All</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                </select>
+                <span id="refresh" class="fa fa-refresh">Refresh</span>
+        </div>
+        <table id="myTable" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Username/Email</th>
+                        <th>Phone</th>
+                        <th>City</th>
+                        <th>Status</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+                </table>
     </div>
 </body>
 <script>
+    var asc = <%- JSON.stringify(data)%>;
     var span = menu.getElementsByTagName("span");
     var div = menu.getElementsByTagName('div');
     for(var i=0;i<div.length;i++){
@@ -276,18 +274,12 @@
             title: 'Confirm Logout',
             boxWidth: '20%',
             theme: 'supervan',
-            backgroundDismissAnimation: 'random',
+            // backgroundDismissAnimation: 'random',
             useBootstrap: false,
             content: 'Do you really want logout?',
             buttons: {
                 Yes: function () {
-                // $.alert('Yes');
-                var data = new Object();
-                data.logout = 1;
-                var request = new XMLHttpRequest();
-                request.open("POST",'/logout');
-                request.setRequestHeader("Content-Type","application/json");
-                request.send(JSON.stringify(data));
+                    window.location = '/logout';
                 },
                 No: function () {
                 // $.alert('No');
@@ -296,5 +288,198 @@
         });
     });
 
+    $(document).ready(function(){
+            $.ajax({
+                url: initTable(),
+                success: function(){
+                    appendBtns();
+                }
+        });
+    });
+
+    function initTable(){
+        $('#myTable').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "/getUserData",
+                "type": "POST"
+            },
+            "columns": [
+                { "data" : "name" },
+                { "data" : "email"},
+                { "data" : "city"},
+                { "data" : "status"},
+                { "data" : "role",
+                "class" : "role"},
+                { "data" : null},
+            ],
+            "columnDefs": [{
+                "targets": -1,
+                "render": function(data, type, row, meta) {
+                    var r = row.role;
+                    console.log(r);
+                    data = '<center class="actions"></center>'
+                    return data;
+                }
+            }],
+        });
+    }
+    function appendBtns() {
+		var actionsCol = document.getElementsByClassName("actions");
+		var roleCol = document.getElementsByClassName("role");
+		var refreshBtn = document.getElementById("refresh");
+		var sendToInput = document.getElementById("sendTo");
+		var emailSubject = document.getElementById("emailSubject");
+		var emailSendBtn = document.getElementById("sendMail");
+		refreshBtn.addEventListener("click", function () {
+			window.location.reload();
+		})
+		for(var i = 1;i<roleCol.length;i++ ) {
+			state = asc[i-1].flag;
+			if(roleCol[i].innerHTML == "admin" || roleCol[i].innerHTML == "user") {
+				console.log("hello admin");
+				let emailBtn = document.createElement("button");
+				let editBtn = document.createElement("button");
+				let stateBtn = document.createElement("button");
+				let usernameTitle = document.getElementById("usernameTitle");
+				let span = document.createElement("span");
+                emailBtn.classList.add("actions-btn", "btn", "btn-dark");
+                emailBtn.setAttribute("style","background: black;border:0");
+				editBtn.classList.add("actions-btn", "btn", "btn-primary");
+                editBtn.setAttribute("id", "edit" + asc[i - 1]._id);
+                editBtn.setAttribute("style","background: #337ab7; border:0");
+				editBtn.addEventListener("click", function () {
+					$('#editModal').modal();
+					var id = event.target.getAttribute("id");
+					for(var j = 0;j<asc.length;j++) {
+						if(("edit" + asc[j]._id) == id) {
+							usernameTitle.innerHTML += asc[j].email;		
+						}
+					}
+				})
+				emailBtn.setAttribute("id", "email" + asc[i - 1]._id);
+				emailBtn.addEventListener("click", function (event) {
+					$("#emailModal").modal();
+					var id = event.target.getAttribute("id");
+					for(var j = 0;j<asc.length;j++) {
+						if(("email" + asc[j]._id) == id) {
+							sendToInput.value = asc[j].email;		
+						}
+					}
+					$.trumbowyg.svgPath = "/css/trumbowyg.svg"
+					$("#textarea").trumbowyg();
+					emailSendBtn.addEventListener("click", function () {
+						var data = new Object({
+							to: sendTo.value,
+							from: "rajat.sharma1043@gmail.com",
+							subject: emailSubject.value,
+							text: $('#textarea').val(),
+						});
+						console.log(data);
+						var req = new XMLHttpRequest();
+						req.open("POST", "/sendMail");
+						req.setRequestHeader("Content-Type", "application/json");
+						req.send(JSON.stringify(data));
+					})
+				});
+				editBtn.addEventListener("click", function () {
+					var editUserName = document.getElementById("editUserName");
+					var editCity = document.getElementById("editCity");
+					var editStatus = document.getElementById("editStatus");
+					var editRole = document.getElementById("editRole");
+					var editPhoneNo = document.getElementById("editPhoneNo");
+					var updateBtn = document.getElementById("updateBtn");
+					updateBtn.addEventListener("click", function () {
+						var data = new Object({
+							name: editUserName.value,
+							city: editCity.value,
+							phoneno: editPhoneNo.value,
+							role: editRole.value,
+							status: editStatus.value,
+						});
+						var request = new XMLHttpRequest();
+						request.open("POST", "/updateUser");
+						request.setRequestHeader("Content-Type", "application/json");
+						request.send(JSON.stringify(data));	
+						$('#editModal').modal("hide");
+					})
+				});
+                stateBtn.setAttribute("id", asc[i - 1]._id);
+                stateBtn.setAttribute("style","background: #f0ad4e;border:0")
+				stateBtn.addEventListener("click", function (event) {
+					if(state == "0") {
+						stateBtn.classList.remove("btn-warning");
+						stateBtn.classList.add("actions-btn", "btn", "btn-success");
+						stateBtn.childNodes[0].classList.remove("fa", "fa-times-circle");
+						stateBtn.childNodes[0].setAttribute("class", "fa fa-check-circle");
+						state = "1";
+					} else {
+						stateBtn.classList.remove("btn-success");
+						stateBtn.classList.add("actions-btn", "btn", "btn-warning");	
+						stateBtn.childNodes[0].classList.remove("fa", "fa-check-circle");
+						stateBtn.childNodes[0].setAttribute("class", "fa fa-times-circle");
+						state = "0";
+					}	
+					var req = new XMLHttpRequest();
+					req.open("POST", "/updateState");
+					req.setRequestHeader("Content-Type", "application/json");
+					req.send(JSON.stringify({id: event.target.getAttribute("id"), state: state}));
+					window.location.reload();
+				})
+				if(state == "0") {
+					stateBtn.classList.add("actions-btn", "btn", "btn-success");	
+					span.setAttribute("class", "fa fa-check-circle");	
+				} else {
+					stateBtn.classList.add("actions-btn", "btn", "btn-warning");	
+					span.setAttribute("class", "fa fa-times-circle");
+				}
+				stateBtn.appendChild(span); 
+				span = document.createElement("span");
+				span.setAttribute("class", "fa fa-envelope");
+				emailBtn.appendChild(span);
+				span = document.createElement("span");
+				span.setAttribute("class", "fa fa-edit");
+				editBtn.appendChild(span);
+				actionsCol[i - 1].appendChild(emailBtn);
+				actionsCol[i - 1].appendChild(editBtn);
+				actionsCol[i - 1].appendChild(stateBtn);
+			} else if( roleCol[i].innerHTML == "superadmin") {
+				console.log("hello user");
+				var emailBtn = document.createElement("button");
+				emailBtn.classList.add("actions-btn", "btn", "btn-dark");
+				emailBtn.setAttribute("id", "email" + asc[i - 1]._id);
+				emailBtn.addEventListener("click", function (event) {
+					$("#emailModal").modal();
+					var id = event.target.getAttribute("id");
+					for(var j = 0;j<asc.length;j++) {
+						if(("email" + asc[j]._id) == id) {
+							sendToInput.value = asc[j].email;		
+						}
+					}
+					
+					$.trumbowyg.svgPath = "/css/trumbowyg.svg"
+					$("#textarea").trumbowyg();
+					emailSendBtn.addEventListener("click", function () {
+						var data = new Object({
+							to: sendTo.value,
+							from: "ridhavrm@gmail.com",
+							subject: emailSubject.value,
+							text: $("#textarea").val(),
+						});
+						console.log(data);
+						var req = new XMLHttpRequest();
+						req.open("POST", "/sendMail");
+						req.setRequestHeader("Content-Type", "application/json");
+						req.send(JSON.stringify(data));
+					})
+				});
+				var span = document.createElement("span");
+				span.setAttribute("class", "fa fa-envelope");
+				emailBtn.appendChild(span);
+				actionsCol[i - 1].appendChild(emailBtn);
+			}
+		}
+    }
 </script>
 </html>

@@ -23,7 +23,7 @@
             font-family: 'Roboto', sans-serif;
 		}
 		nav {
-            position: absolute;
+            position:fixed;
             width:100%;
             height: 60px;
 			background-color: #222D3C;
@@ -59,6 +59,7 @@
 			padding: 15px;
         }
 		#menu {
+            position:fixed;
             padding-top: 60px;
             background-color: #000;
             width: 50px;
@@ -174,7 +175,7 @@
     <div id="body_internal_div">
         <div id="adduser_heading"><h1>Add User</h1></div>
         <div id="adduser_form_div">
-            <form action="/<%=data[0].role%>/adduser" method="post">
+            <form>
                 <input type="text"  id="name" required name="name" placeholder="Name">
                 <input type="text" id="email" required name="email" placeholder="Email">
                 <input type="text" id="password" required name="password" placeholder="User Password">
@@ -182,7 +183,7 @@
                 <input type="text" id="city" required name="city" placeholder="City">
                 <h3><label>Role:</label></h3>
                 <select id="selectrole" name="role">
-                    <option value="selectuserrole">Select User Role</option>
+                    <option selected="true" disabled="disabled">Select User Role</option>
                     <option value="user">User</option>
                     <option value="communitybuilder">Community Builder</option>
                     <option value="admin">Admin</option>
@@ -220,16 +221,15 @@
     //Add User Button and Cancel Button
     var add_user_button = document.getElementById("add_user_button");
     var cancel_button = document.getElementById("cancel_button");
-    // var role = document.getElementById("selectrole")[0].value;
 
 	$(document).ready(function(){
       $("#sideBtn").click(function(){
          if($("#menu").width() == 50){
             $("#menu").animate({width: '250px'},400);
-            $("#body_internal_div").animate({left:'35%'},400);
+            $("#body_internal_div").animate({left:'35%'},300);
          } else{
             $("#menu").animate({width: '50px'},400);
-            $("#body_internal_div").animate({left:'30%'},400);
+            $("#body_internal_div").animate({left:'30%'},300);
          }
       });
    });
@@ -266,18 +266,12 @@
             title: 'Confirm Logout',
             boxWidth: '20%',
             theme: 'supervan',
-            backgroundDismissAnimation: 'random',
+            // backgroundDismissAnimation: 'random',
             useBootstrap: false,
             content: 'Do you really want logout?',
             buttons: {
                 Yes: function () {
-                // $.alert('Yes');
-                var data = new Object();
-                data.logout = 1;
-                var request = new XMLHttpRequest();
-                request.open("POST",'/logout');
-                request.setRequestHeader("Content-Type","application/json");
-                request.send(JSON.stringify(data));
+                    window.location = '/logout';
                 },
                 No: function () {
                 // $.alert('No');
@@ -285,6 +279,36 @@
             }
         });
     });
+    
+    add_user_button.addEventListener('click',function(){
+        var userData = new Object();
+        userData.name = document.getElementById('name').value;
+        userData.email = document.getElementById('email').value;
+        userData.password = document.getElementById('password').value;
+        userData.phoneno = document.getElementById('phoneno').value;
+        userData.city = document.getElementById('city').value;
+        userData.role = document.getElementById('selectrole').value;
+        userData.status = 'pending';
+        userData.flag = 0;
+        var request = new XMLHttpRequest();
+        request.open('POST','/<%= data[0].role%>/adduser');
+        request.setRequestHeader('Content-Type','application/json');
+        request.send(JSON.stringify(userData));
+        request.onload = function(){
+            var dataReturned = request.responseText;
+            if(dataReturned==""||dataReturned==null){
+            alert('Error in Adding Details!!!');
+            window.location = '/<%= data[0].role%>/adduser';
+            }
+            else{
+                console.log(dataReturned);
+                alert('User added correctly');
+                window.location = '/<%= data[0].role%>/adduser';
+            }
+        }
+    });
+
+    
 
 </script>
 </html>

@@ -12,36 +12,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        *{
+            box-sizing: border-box;
+        }
         body {
 			margin: 0;
-            background: teal;
             padding: 0;
+            width: 100%;
             background: #f5f5f5;
             font-family: 'Roboto', sans-serif;
 		}
 		nav {
+            position: fixed;
             width:100%;
-            height: 8vh;
+            height: 60px;
 			background-color: #222D3C;
             color: #fff;
+            z-index: 9999999;
+            overflow: hidden;
 		}
 		nav p {
-			margin: 0;
-			font-size: 30px;
-			padding: 10px;
-			float: left;
+            margin: 0;
+            float: left;
+            height: 50px;
+            padding: 15px 15px;
+            font-size: 20px;
+            line-height: 20px;
+            font-weight: bold;
 		}
 		nav span {
+            float: right;
             padding: .2em .6em .3em;
+            margin-top: 22px;
+            margin-left: 5px;
             font-size: 75%;
-            font-weight: 500;
+            line-height: 1;
+            font-weight: 700;
             color: #fff;
-            margin-top: 2.5vh;
-            margin-left: 1vh;
             font-size: 14px;
             vertical-align: center;
             border-radius: .25em;
-            float: right;
+            vertical-align: baseline;
 		}
 		nav img {
 			float: right;
@@ -49,13 +60,14 @@
 			padding: 15px;
         }
 		#menu {
-			background-color: #000;
-			width: 50px;
-			transition-property: width;
-			transition-duration: 0.7s;
+            position: fixed;
+            padding-top: 60px;
+            background-color: #000;
+            width: 50px;
+            height:100vh;
+            color:white;
             box-sizing: border-box;
-            float: left;
-            height:92vh;
+            overflow:hidden;
 		}
 		.fa {
 			color: #fff;
@@ -65,10 +77,8 @@
 			margin-left: 11px;
 			box-sizing: border-box;
 		}
-		#menu span {
-			display: none;
-		}
 		.menu-item {
+            width: 250px;
 			cursor: pointer;
 			opacity: 0.8;
 			color: #fff;
@@ -91,11 +101,170 @@
         #profile_button{
             cursor: pointer;
         }
+        #body_internal_div{
+            background: #fff;
+            position: absolute;
+            width: 75%;
+            left: 12.5%;
+            top: 10%;
+            margin-bottom: 50px;
+            border: 1px solid #eeeeee;
+            box-shadow: 0px 1px 10px 0px rgb(201, 201, 201);
+            overflow: auto;
+            padding: 15px;
+        }
+        #profile_div{
+            padding:0;
+            margin:0;
+            margin-bottom: 15px;
+            width: 150px;
+            border: 1px solid #bbbbbb;
+            box-shadow: 0px 1px 10px 0px rgb(210, 210, 210);
+            border-radius: 3px;
+        }
+        #profile_photo_div{
+            width: 20%;
+        }
+        #profile_pic{
+            height: 150px;
+            width:150px;
+        }
+        #basic_info_div{
+            width:100%;
+            padding: 8px;
+            border: 1px solid #bbbbbb;
+            border-radius: 4px;
+        }
+        #basic_info_heading{
+            padding: 0;
+            margin: 0;
+            padding: 8px 15px;
+            color: #333;
+            background-color: #e6e6e6;
+            border: 1px solid #bbbbbb;
+            border-color: rgb(170, 170, 170);
+            border-radius: 3px;
+        }
+        label{
+            margin-top: 10px;
+            display: inline-block;
+            max-width: 100%;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        #email_input{
+            cursor: not-allowed;
+        }
+        input,select{
+            display: block;
+            margin-bottom: 5px;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            background-color: #f5f5f5;
+            opacity: 1;
+        }
+        #buttons_div{
+            margin-top: 40px;
+        }
+        .buttons{
+            color: #fff;
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        #update_button,#cancel_button{
+            float: right;
+        }
+        #change_password_buttonn{
+            background-color: #f0ad4e;
+            border-color: #eea236;
+        }
+        #update_button{
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+        #cancel_button{
+            background-color: #d9534f;
+            border-color: #d43f3a;
+        }
     </style>
 </head>
 <body>
     <% include partials/menu.html %>
-    Hello World
+    <div id="body_internal_div">
+        <div id="profile_photo_div">
+            <div id="profile_div">
+                <img src='/images/default.png' id='profile_pic'>
+            </div>
+        </div>
+        <div id='basic_info_div'>
+        <div id="basic_info_heading">Basic Info</div>
+        <div id="Basic_info_body">
+            <label id="email_label">Email:</label>
+            <input type="text" id="email_input" value="<%=data[0].email%>">
+            <label id="name_label">Name:</label>
+            <input type="text" value="<%=data[0].name%>" id="name_input">
+            <label id="dob_label">DOB:</label>
+            <input type="text" id="dob_input" value="<%=data[0].dob%>">
+            <label id="gender_label">Gender: </label>
+            <select id="select_gender" name="role">
+                <option selected="true" disabled="disabled">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="transgender">Transgender</option>
+            </select>
+            </select>
+            <label id="phone_label">Phone: </label>
+            <input type="text" id="phoneno_input" value="<%=data[0].phoneno%>">
+            <label id="contact_label">City: </label>
+            <input type="text" id="city_input" value="<%=data[0].city%>">
+            <label id="interest_label">Interests: </label>
+            <input type="text" id="interest_input">
+            <label id="journey_label">Tell us a bit more about your journey: </label>
+            <input type="text" id="journey_input">
+            <label id="expectation_label">What are your expectations from the communities? </label>
+            <input type="text" id="expectation_input">
+        </div>
+        <div id='buttons_div'>
+            <form>
+            <button id="change_password_buttonn" type="buttons" class="buttons">Change Password</button>
+            <button id="update_button" type="button" class="buttons">Update</button>
+            <button id="cancel_button" type="button" class="buttons">Cancel</button>
+            </form>
+        </div>
+        </div>
+    </div>
 </body>
 <script>
     var menu = document.getElementById("menu");
@@ -120,27 +289,23 @@
     var tag_panel_button = document.getElementById('tag_panel_button');
     var change_password_button = document.getElementById('change_password_button');
     var logout_button = document.getElementById('logout_button');
-    
 
-	sideBtn.addEventListener("click", function () {
-		if(menu.style.width == '300px') {
-            menu.style.width = '50px';
-            body_internal_div.style.marginLeft = '12%';
-            body_internal_div.style.marginTop = '2%';
-			for(var i = 0;i<span.length;i++) {
-				span[i].style.display = 'none';
-			}
-		} else {
-            menu.style.width = '300px';
-            body_internal_div.style.marginLeft = '4%';
-            body_internal_div.style.marginTop = '1.5%';
-			setTimeout(function () {
-				for(var i = 0;i<span.length;i++) {
-					span[i].style.display = 'inline';
-				}
-			}, 210);
-		}
-    })
+    var change_password_buttonn = document.getElementById('change_password_buttonn');
+    var cancel_button = document.getElementById('cancel_button');
+    var update_button = document.getElementById('update_button');
+
+    $(document).ready(function(){
+      $("#sideBtn").click(function(){
+         if($("#menu").width() == 50){
+            $("#menu").animate({width: '250px'},300);
+            $("#body_internal_div").animate({left:'20%'},300);
+         } else{
+            $("#menu").animate({width: '50px'},300);
+            $("#body_internal_div").animate({left:'12.5%'},300);
+         }
+      });
+   });
+	
 
     profile_button.addEventListener("click",function(event){
         window.location = '/profile'
@@ -171,24 +336,57 @@
             title: 'Confirm Logout',
             boxWidth: '20%',
             theme: 'supervan',
-            backgroundDismissAnimation: 'random',
+            // backgroundDismissAnimation: 'random',
             useBootstrap: false,
             content: 'Do you really want logout?',
             buttons: {
                 Yes: function () {
-                // $.alert('Yes');
-                var data = new Object();
-                data.logout = 1;
-                var request = new XMLHttpRequest();
-                request.open("POST",'/logout');
-                request.setRequestHeader("Content-Type","application/json");
-                request.send(JSON.stringify(data));
+                    window.location = '/logout';
                 },
                 No: function () {
                 // $.alert('No');
                 }
             }
         });
+    });
+
+    change_password_buttonn.addEventListener('click',function(){
+        window.location = '/changePassword'
+    });
+
+    cancel_button.addEventListener('click',function(){
+        window.location = '/profile';
+    });
+
+    update_button.addEventListener('click',function(){
+        console.log('I am clicked');
+        var updetail = new Object();
+        updetail.email = '<%= data[0].email%>';
+        updetail._id = '<%= data[0]._id%>';
+        updetail.name = document.getElementById('name_input').value;
+        updetail.dob = document.getElementById('dob_input').value;
+        updetail.gender = document.getElementById('select_gender').value;
+        updetail.phoneno = document.getElementById('phoneno_input').value;
+        updetail.city = document.getElementById('city_input').value;
+        updetail.interest = document.getElementById('interest_input').value;
+        updetail.journey = document.getElementById('journey_input').value;
+        updetail.expectation = document.getElementById('expectation_input').value;
+        var request = new XMLHttpRequest();
+        request.open('PUT','/updateUserDetails');
+        request.setRequestHeader('Content-Type','application/json');
+        request.send(JSON.stringify(updetail));
+        request.onload = function(){
+            var dataReturned = request.responseText;
+            if(dataReturned==""||dataReturned==null){
+            alert('Error in Updating Details!!!');
+            window.location = '/profile';
+            }
+            else{
+                console.log(dataReturned);
+                alert('Data Updated correctly');
+                window.location = '/profile';
+            }
+        }
     });
 
 </script>

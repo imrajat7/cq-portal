@@ -23,7 +23,7 @@
             font-family: 'Roboto', sans-serif;
 		}
 		nav {
-            position: absolute;
+            position: fixed;
             width:100%;
             height: 60px;
 			background-color: #222D3C;
@@ -59,6 +59,7 @@
 			padding: 15px;
         }
 		#menu {
+            position:fixed;
             padding-top: 60px;
             background-color: #000;
             width: 50px;
@@ -98,8 +99,8 @@
             left: 14%;
             top: 12%;
             width: 72%;
-            height: 550px;
-            overflow: auto;
+            height: 540px;
+            overflow: hidden;
             border: 1px solid #eeeeee;
             box-shadow: 0px 1px 10px 0px rgb(201, 201, 201);
         }
@@ -107,10 +108,19 @@
             width: 100%;
             height:30%;
             line-height: 30%;
+            margin-bottom: 18px;
         }
         #user_icon{
-            padding: 25px;
-            font-size: 100px;
+            width: auto;
+        }
+        #profile_div{
+            padding:0;
+            margin:0;
+            margin-left: 18px;
+            margin-top: 18px;
+            height: 150px;
+            width: 150px;
+            box-shadow: 0px 1px 10px 0px rgb(201, 201, 201);
         }
         .active{
             background: #51a1e2 !important;
@@ -122,7 +132,7 @@
         .outer_div{
             height:22%;
             margin-left:2%;
-            margin-top: 3%;
+            margin-top: 2%;
             width:47%;
             text-align: center;
             float: left;
@@ -152,7 +162,7 @@
 <body>
     <% include partials/menu.html %>
     <div id="body_internal_div">
-        <div id="body_internal_profile_div"><span><i class="far fa-user" id="user_icon"></i></span></div>
+        <div id="body_internal_profile_div"><div id='profile_div'><span><img src="/images/default.png" class="far fa-user" id="user_icon"></span></div></div>
         <div id="fields_outer_div">
             <div class="outer_div">
                 <div class="div_inner_1"><span class="spans">Email</span></div>
@@ -210,10 +220,10 @@
       $("#sideBtn").click(function(){
          if($("#menu").width() == 50){
             $("#menu").animate({width: '250px'},400);
-            $("#body_internal_div").animate({left:'20%'},400);
+            $("#body_internal_div").animate({left:'20%'},300);
          } else{
             $("#menu").animate({width: '50px'},400);
-            $("#body_internal_div").animate({left:'14%'},400);
+            $("#body_internal_div").animate({left:'14%'},300);
             }
         });
     });
@@ -247,18 +257,12 @@
             title: 'Confirm Logout',
             boxWidth: '20%',
             theme: 'supervan',
-            backgroundDismissAnimation: 'random',
+            // backgroundDismissAnimation: 'random',
             useBootstrap: false,
             content: 'Do you really want logout?',
             buttons: {
                 Yes: function () {
-                // $.alert('Yes');
-                var data = new Object();
-                data.logout = 1;
-                var request = new XMLHttpRequest();
-                request.open("POST",'/logout');
-                request.setRequestHeader("Content-Type","application/json");
-                request.send(JSON.stringify(data));
+                window.location = '/logout';
                 },
                 No: function () {
                 // $.alert('No');

@@ -23,7 +23,7 @@
             font-family: 'Roboto', sans-serif;
 		}
 		nav{
-            position: absolute;
+            position:fixed;
             width:100%;
             height: 60px;
 			background-color: #222D3C;
@@ -59,6 +59,7 @@
 			padding: 15px;
         }
 		#menu {
+            position:fixed;
             padding-top: 60px;
             background-color: #000;
             width: 50px;
@@ -275,18 +276,12 @@
             title: 'Confirm Logout',
             boxWidth: '20%',
             theme: 'supervan',
-            backgroundDismissAnimation: 'random',
+            // backgroundDismissAnimation: 'random',
             useBootstrap: false,
             content: 'Do you really want logout?',
             buttons: {
                 Yes: function () {
-                // $.alert('Yes');
-                var data = new Object();
-                data.logout = 1;
-                var request = new XMLHttpRequest();
-                request.open("POST",'/logout');
-                request.setRequestHeader("Content-Type","application/json");
-                request.send(JSON.stringify(data));
+                    window.location = '/logout';
                 },
                 No: function () {
                 // $.alert('No');

@@ -32,7 +32,9 @@ var userSchema = mongoose.Schema({
 	phoneno: String, 
 	gender: String,
 	dob: String,
-	role: String
+    role: String,
+    status: String,
+    flag: String
 });
 
 var userdetails = mongoose.model("userdetails", userSchema);
@@ -53,7 +55,9 @@ app.post('/login',function(req,res){
 });
 
 app.get("/admin/userlist",function(req,res){
-    res.render('userlist',{data: req.session.data});
+    userdetails.find({}).exec(function(error, data) {
+		res.render('userlist', {data: data});
+	});
 });
 
 app.get("/admin/profile", function(req, res) {
@@ -82,13 +86,9 @@ app.get('/',function(req,res){
     }
 });
 
-app.post('/logout',function(req,res){
-    if(req.body.logout){
-        req.session.userName = "";
-        req.session.password = "";
-        req.session.data = "";
-        res.sendFile(path.join(__dirname,'public','login.html'));
-    }
+app.get('/logout',function(req,res){
+    req.session.isLogin = 0;
+    res.redirect('/');
 });
 
 app.get('/profile',function(req,res){
@@ -117,11 +117,40 @@ app.put('/changePassword',function(req,res){
         .then(data => {
             console.log(data)
             res.send(data)
-          })
-          .catch(err => {
+        })
+        .catch(err => {
             console.error(err)
             res.send(error)
-          })
+        })
+});
+
+app.put('/updateUserDetails',function(req,res){
+    console.log(req.body);
+    userdetails.findOneAndUpdate(
+        {
+            _id: req.body._id,
+            email: req.body.email
+        },
+        {
+            name: req.body.name,
+            dob : req.body.dob,
+            gender: req.body.gender,
+            phoneno: req.body.phoneno,
+            city: req.body.city
+        },
+        {
+            new: true,
+            runValidators: true
+        })
+        .then(data=>{
+            console.log(data);
+            res.send(data);
+        })
+        .catch(err=>{
+            console.log('eror aya');
+            console.error(err);
+            res.send(error);
+        })
 });
 
 //Function to add in the database
@@ -135,7 +164,9 @@ app.post('/admin/adduser',function (req, res) {
 	    phoneno: req.body.phoneno, 
 	    gender: "male",
 	    dob: "11/08/1999",
-	    role: "admin"
+        role: req.body.role,
+        status: req.body.status,
+        flag: req.body.flag
     })
     newUser.save()
      .then(data => {
@@ -146,8 +177,23 @@ app.post('/admin/adduser',function (req, res) {
        console.error(err)
        res.send(error)
      })
-    
   })
+
+  app.post('/getUserData',function(req,res){
+      console.log("hello world")
+      userdetails.countDocuments(function(error,count){
+          var start = parseInt(req.body.start);
+          var len = parseInt(req.body.length);
+          userdetails.find({}).skip(start).limit(len)
+          .then(data=>{
+              console.log(data)
+              res.send({"recordsTotal" : count, "recordsFiltered": count,data})
+          })
+          .catch(err=>{
+              res.send(err);
+          })
+      })
+  });
 
 app.listen(8000);
 
