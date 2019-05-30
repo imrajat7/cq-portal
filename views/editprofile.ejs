@@ -123,7 +123,8 @@
             border-radius: 3px;
         }
         #profile_photo_div{
-            width: 20%;
+            width: 80%;
+            display: inline-block;
         }
         #profile_pic{
             height: 150px;
@@ -218,6 +219,14 @@
             background-color: #d9534f;
             border-color: #d43f3a;
         }
+        #uploadImage{
+            float: right;
+            margin-bottom: 20px; 
+        }
+        #upload_button{
+            background:  #337ab7;
+            border: 0px;
+        }
     </style>
 </head>
 <body>
@@ -225,7 +234,21 @@
     <div id="body_internal_div">
         <div id="profile_photo_div">
             <div id="profile_div">
-                <img src='/images/default.png' id='profile_pic'>
+                <img src='/uploads/<%=data[0].image%>' id='profile_pic'>
+                    <div id="uploadImage">
+                        <form method="POST" action="/upload" enctype="multipart/form-data">
+                            <div class="text-center">
+                                <%= typeof msg != 'undefined' ? msg : '' %>
+                            </div>
+                            <div class="form-group upload-area">
+                                <label for="exampleFormControlFile1">Click Here To upload Files</label>
+                                <input type="file" name="files" class="form-control-file" id="exampleFormControlFile1">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="buttons" id="upload_button">Upload</button>
+                            </div>
+                        </form>
+                    </div>
             </div>
         </div>
         <div id='basic_info_div'>
@@ -239,8 +262,8 @@
             <input type="text" id="dob_input" value="<%=data[0].dob%>">
             <label id="gender_label">Gender: </label>
             <select id="select_gender" name="role">
-                <option selected="true" disabled="disabled">Select Gender</option>
-                <option value="male">Male</option>
+                <option disabled="disabled">Select Gender</option>
+                <option value="male" selected="selected">Male</option>
                 <option value="female">Female</option>
                 <option value="transgender">Transgender</option>
             </select>
@@ -379,7 +402,7 @@
             var dataReturned = request.responseText;
             if(dataReturned==""||dataReturned==null){
             alert('Error in Updating Details!!!');
-            window.location = '/profile';
+                window.location = '/profile';
             }
             else{
                 console.log(dataReturned);

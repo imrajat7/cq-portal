@@ -2,6 +2,16 @@ var express = require('express')
 var path = require('path');
 var app = express();
 var session = require('express-session');
+const nodemailer = require("nodemailer");
+var multer = require("multer");
+var smtpTransport = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    auth: {
+        user: "rajat.sharma1043@gmail.com",
+        pass: "hpp@vilion2017"
+    }
+})
 
 //Access Static files
 app.use(express.static(path.join(__dirname,'public')));
@@ -24,6 +34,7 @@ mongoose.connect(mongoDb, function (error) {
 	console.log("Db opened Successfully");
 });
 
+mongoose.set('useFindAndModify',false);
 var userSchema = mongoose.Schema({
 	name: String,
 	email: String,
@@ -34,7 +45,8 @@ var userSchema = mongoose.Schema({
 	dob: String,
     role: String,
     status: String,
-    flag: String
+    flag: String,
+    image: String
 });
 
 var userdetails = mongoose.model("userdetails", userSchema);
@@ -53,6 +65,59 @@ app.post('/login',function(req,res){
         res.send(data);
     });
 });
+
+const storage = multer.diskStorage({
+    destination: './public/uploads',
+    filename: function (req, file, cb) {
+        // null as first argument means no error
+        cb(null, req.session.data[0]._id + path.extname(file.originalname))
+        req.session.data[0].image = req.session.data[0]._id + path.extname(file.originalname);
+    }
+})
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter: function (req, file, cb) {
+        sanitizeFile(file, cb);
+    }
+}).single('files')
+
+app.post('/upload', (req, res) => {
+
+    upload(req, res, (err) => {
+        if (err){
+            res.render('editprofile', { msg: err})
+        }else{
+            // If file is not selected
+            if (req.file == undefined) {
+                res.render('editprofile', { msg: 'No file selected!' })
+
+            }
+            else{
+                res.render('editprofile',{data: req.session.data})
+            }
+        }
+
+    })
+})
+
+function sanitizeFile(file, cb) {
+    // Define the allowed extension
+    let fileExts = ['png', 'jpg', 'jpeg', 'gif']
+    // Check allowed extensions
+    let isAllowedExt = fileExts.includes(file.originalname.split('.')[1].toLowerCase());
+    // Mime type must be an image
+    let isAllowedMimeType = file.mimetype.startsWith("image/")
+    if(isAllowedExt && isAllowedMimeType){
+        return cb(null ,true) // no errors
+    }
+    else{
+        // pass error msg to callback, which can be displaye in frontend
+        cb('Error: File type not allowed!')
+    }
+}
 
 app.get("/admin/userlist",function(req,res){
     userdetails.find({}).exec(function(error, data) {
@@ -136,7 +201,8 @@ app.put('/updateUserDetails',function(req,res){
             dob : req.body.dob,
             gender: req.body.gender,
             phoneno: req.body.phoneno,
-            city: req.body.city
+            city: req.body.city,
+            image: req.session.data[0].image
         },
         {
             new: true,
@@ -147,7 +213,6 @@ app.put('/updateUserDetails',function(req,res){
             res.send(data);
         })
         .catch(err=>{
-            console.log('eror aya');
             console.error(err);
             res.send(error);
         })
@@ -177,6 +242,21 @@ app.post('/admin/adduser',function (req, res) {
        console.error(err)
        res.send(error)
      })
+     var mailOptions={
+         to: req.body.email,
+         subject: "Welcome to CQ",
+         text: "Welcome to CQ and your password is " + req.body.password + "." + " "
+     }
+     console.log(mailOptions);
+     smtpTransport.sendMail(mailOptions,function(error,response){
+         if(error){
+             console.log(error);
+             res.send("error");
+         }else{
+             console.log("Message sent: "+ response.message);
+             res.end("sent");
+         }
+     });
   })
 
   app.post('/getUserData',function(req,res){
@@ -186,7 +266,7 @@ app.post('/admin/adduser',function (req, res) {
           var len = parseInt(req.body.length);
           userdetails.find({}).skip(start).limit(len)
           .then(data=>{
-              console.log(data)
+            //   console.log(data)
               res.send({"recordsTotal" : count, "recordsFiltered": count,data})
           })
           .catch(err=>{
