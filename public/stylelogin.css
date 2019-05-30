@@ -1,3 +1,6 @@
+*{
+    box-sizing: border-box;
+}
 body{
 background: #fff;
 padding:0;
@@ -6,24 +9,27 @@ overflow-x: hidden;
 font-family: 'Roboto', sans-serif;
 }
 #login_header{
-    height: 9vh;
-    width: 100vw;
+    height: 9;
+    width: 100%;
     line-height: 9vh;
     box-shadow: 0px 1px 10px 0px rgb(150, 150, 150);
 }
 #login_body{
-    height:80vh;
-    width:100vw;
+    height:80%;
+    width:100%;
 }
 #login_footer{
-    height: 11vh;
-    width: 100vw;
+    position: absolute;
+    bottom: 0;
+    height: 12%;
+    width: 100%;
     box-shadow: 0px -1px 10px 0px rgb(150, 150, 150);
+
 }
 #header_text{
     font-size: 30px;
     vertical-align: center;
-    margin-left: 1vw;;
+    margin-left: 1vw;
 }
 #login_footer{
     font-size: 20px;
@@ -34,11 +40,12 @@ font-family: 'Roboto', sans-serif;
 }
 #body_inner_div{
     position: absolute;
-    height: 50vh;
-    width: 50vw;
-    top:20vh;
-    left: 25vw;
-    box-shadow: 0px 0px 10px 0px rgb(150, 150, 150);
+    height: 42%;
+    width: 50%;
+    top: 20%;
+    left: 25%;
+    border: 1px solid rgb(170, 170, 170);
+    box-shadow: 0px 0px 10px 0px rgb(180, 180, 180);
 }
 #login_body_text{
     height: 10vh;
@@ -52,11 +59,11 @@ form{
 }
 .input_field{
     display: inline-block;
-    margin:15px 0px;
-    height: 20px;
+    margin:2% 0px;
+    height: 2%;
     width:90%;
     border:0;
-    padding: 10px;
+    padding: 1%;
     border: 1px solid rgb(200, 200, 200);
     font-size: 17px;
 }
@@ -69,7 +76,6 @@ form{
     padding: 13px 18px;
     font-weight: 400;
     text-align: center;
-    margin-top: 25px;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -78,6 +84,39 @@ form{
     color: black;
     transition-duration: 500ms;
     transform: scale(1.1);
+}
+#sign_in_with_div{
+    position: absolute;
+    padding: 5px;
+    transform: translateX(-50%);
+    width: 25%;
+    left: 50%;
+    top: 65%;
+    border: 1px solid rgb(170, 170, 170);
+    box-shadow: 0px 0px 10px 0px rgb(190, 190, 190);
+    text-align: center;
+    font-weight: 500;
+}
+#sign_in_text_div{
+    height: 25px;
+    line-height: 25px;
+    vertical-align: center;
+    background: rgb(240,240,240);
+}
+#sign_in_body_div{
+    height: 60px;
+}
+#github_body_div{
+    padding: 2px;
+    width: 20%;
+    height: 55px;
+    margin-top: 6px;
+}
+#github_body_div:hover{
+    background: rgb(210, 210, 210);
+    color: rgb(62, 167, 58);
+    transform:scale(1.1);
+    transition-duration: 200ms;
 }
 @media only screen and (max-width: 600px) {
     #body_inner_div{

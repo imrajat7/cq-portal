@@ -1,6 +1,7 @@
 var userName = document.getElementById('input_username');
 var passWord = document.getElementById('input_password');
 var loginBtn = document.getElementById('login_button');
+var github_body_div = document.getElementById('github_body_div');
 
 loginBtn.addEventListener('click',function(event){
     if(userName.value == ""|| passWord.value == ""){
@@ -26,4 +27,13 @@ loginBtn.addEventListener('click',function(event){
             }
         }
     }
+});
+
+github_body_div.addEventListener('click',function(){
+    console.log('Hello');
+    // var request = new XMLHttpRequest();
+    // request.open('GET','/auth/github');
+    // // request.setRequestHeader("Content-Type","application/json");
+    // request.send();
+    window.location = "/auth/github"
 });

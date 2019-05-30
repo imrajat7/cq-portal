@@ -4,6 +4,30 @@ var app = express();
 var session = require('express-session');
 const nodemailer = require("nodemailer");
 var multer = require("multer");
+var passport = require('passport');
+app.use(passport.initialize());
+app.use(passport.session());
+var GitHubStrategy = require('passport-github').Strategy;
+
+passport.serializeUser(function(user,done){
+    done(null,user);
+});
+
+passport.deserializeUser(function(user,done){
+    done(null,user);
+});
+
+passport.use(new GitHubStrategy({
+    clientID: '5f2cedb51874b9b865f9',
+    clientSecret: 'f5455bc3d4730eec3655af2d62e113f4fdce1dc6',
+    callbackURL: "http://localhost:8000/auth/github/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    //User.findOrCreate({ githubId: profile.id }, function (err, user) {
+      return cb(null, profile);
+    })
+);
+
 var smtpTransport = nodemailer.createTransport({
     service: "gmail",
     host: "smtp.gmail.com",
@@ -51,20 +75,16 @@ var userSchema = mongoose.Schema({
 
 var userdetails = mongoose.model("userdetails", userSchema);
 
-app.post('/login',function(req,res){
-    console.log(req.body);
-    userdetails.find({
-        email: req.body.userName,
-        password: req.body.passWord
-    }).exec(function(error,data){
-        console.log(data);
-        req.session.isLogin = 1;
-        req.session.userName = req.body.userName;
-        req.session.password = req.body.passWord;
-        req.session.data = data;
-        res.send(data);
-    });
-});
+app.get('/auth/github',
+  passport.authenticate('github'));
+
+app.get('/auth/github/callback', 
+  passport.authenticate('github', { failureRedirect: '/login.html' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    console.log(req.session.passport.user);
+    res.redirect('/admin/profile');
+  });
 
 const storage = multer.diskStorage({
     destination: './public/uploads',
@@ -119,26 +139,57 @@ function sanitizeFile(file, cb) {
     }
 }
 
+app.post('/login',function(req,res){
+    console.log(req.body);
+    userdetails.find({
+        email: req.body.userName,
+        password: req.body.passWord
+    }).exec(function(error,data){
+        console.log(data);
+        req.session.isLogin = 1;
+        req.session.userName = req.body.userName;
+        req.session.password = req.body.passWord;
+        req.session.data = data;
+        res.send(data);
+    });
+});
+
 app.get("/admin/userlist",function(req,res){
-    userdetails.find({}).exec(function(error, data) {
-		res.render('userlist', {data: data});
-	});
+    if(req.session.isLogin){
+        userdetails.find({}).exec(function(error, data) {
+            res.render('userlist', {data: data});
+        });
+    } else{
+        res.redirect('/')
+    }
 });
 
 app.get("/admin/profile", function(req, res) {
-    res.render('homepage', {data: req.session.data});
+    if(req.session.isLogin)
+        res.render('homepage', {data: req.session.data});
+    else
+        res.redirect('/')
 })
 
 app.get('/changePassword',function(req,res){
-    res.render('changepassword',{data: req.session.data});
+    if(req.session.isLogin)
+        res.render('changepassword',{data: req.session.data});
+    else
+        res.redirect('/')
 });
 
 app.get('/admin/adduser',function(req,res){
-    res.render('adduser',{data: req.session.data});
+    if(req.session.isLogin)
+        res.render('adduser',{data: req.session.data});
+    else
+        res.redirect('/')
 });
 
 app.get('/tag',function(req,res){
-    res.render('tag',{data: req.session.data});
+    if(req.session.isLogin)
+        res.render('tag',{data: req.session.data});
+    else
+        res.redirect('/')
 });
 
 app.get('/',function(req,res){
@@ -157,11 +208,17 @@ app.get('/logout',function(req,res){
 });
 
 app.get('/profile',function(req,res){
-    res.render('profile',{data: req.session.data});
+    if(req.session.isLogin)
+        res.render('profile',{data: req.session.data});
+    else
+        res.redirect('/');
 })
 
 app.get('/editProfile',function(req,res){
-    res.render('editprofile',{data: req.session.data});
+    if(req.session.isLogin)
+        res.render('editprofile',{data: req.session.data});
+    else
+        res.redirect('/');
 })
 
 //Function to update the password
@@ -260,7 +317,6 @@ app.post('/admin/adduser',function (req, res) {
   })
 
   app.post('/getUserData',function(req,res){
-      console.log("hello world")
       userdetails.countDocuments(function(error,count){
           var start = parseInt(req.body.start);
           var len = parseInt(req.body.length);
