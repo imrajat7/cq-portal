@@ -281,7 +281,7 @@
         </div>
         <div id='buttons_div'>
             <form>
-            <button id="change_password_buttonn" type="buttons" class="buttons">Change Password</button>
+            <button id="change_password_buttonn" type="button" class="buttons">Change Password</button>
             <button id="update_button" type="button" class="buttons">Update</button>
             <button id="cancel_button" type="button" class="buttons">Cancel</button>
             </form>
@@ -301,18 +301,6 @@
     
     div[1].classList.add("active");
 
-    var profile_button = document.getElementById("profile_button");
-    
-    //Buttons on Left Navigation Drawer
-    var profile_button_left = document.getElementById('profile_button_left');
-    var add_user_button_left = document.getElementById('add_user_button_left');
-    var user_list_button = document.getElementById('user_list_button');
-    var community_list_button = document.getElementById('community_list_button');
-    var switch_user_button = document.getElementById('switch_user_button');
-    var tag_panel_button = document.getElementById('tag_panel_button');
-    var change_password_button = document.getElementById('change_password_button');
-    var logout_button = document.getElementById('logout_button');
-
     var change_password_buttonn = document.getElementById('change_password_buttonn');
     var cancel_button = document.getElementById('cancel_button');
     var update_button = document.getElementById('update_button');
@@ -328,53 +316,9 @@
          }
       });
    });
-	
-
-    profile_button.addEventListener("click",function(event){
-        window.location = '/profile'
-    })
-
-    change_password_button.addEventListener('click',function(event){
-        window.location = '/changePassword';
-    });
-
-    add_user_button_left.addEventListener('click',function(event){
-        window.location = '/<%= data[0].role%>/adduser';
-    });
-
-    profile_button_left.addEventListener("click",function(event){
-        window.location = '/<%= data[0].role%>/profile';
-    });
-
-    tag_panel_button.addEventListener("click",function(event){
-        window.location = '/tag';
-    });
-    
-    user_list_button.addEventListener("click",function(event){
-        window.location = '/<%=data[0].role%>/userlist';
-    });
-
-    logout_button.addEventListener("click",function(event){
-        $.confirm({
-            title: 'Confirm Logout',
-            boxWidth: '20%',
-            theme: 'supervan',
-            // backgroundDismissAnimation: 'random',
-            useBootstrap: false,
-            content: 'Do you really want logout?',
-            buttons: {
-                Yes: function () {
-                    window.location = '/logout';
-                },
-                No: function () {
-                // $.alert('No');
-                }
-            }
-        });
-    });
 
     change_password_buttonn.addEventListener('click',function(){
-        window.location = '/changePassword'
+        window.location = '/changePassword';
     });
 
     cancel_button.addEventListener('click',function(){

@@ -15,3 +15,86 @@
     <div class="menu-item" id="change_password_button"><i class="fa fa-lock"></i><span>Change Password</span></div>
     <div class="menu-item" id="logout_button"><i class="fa fa-sign-out"></i><span>Logout</span></div>
 </div>
+<script>
+
+    var profile_button = document.getElementById("profile_button");
+    
+    //Buttons on Left Navigation Drawer
+    var profile_button_left = document.getElementById('profile_button_left');
+    var add_user_button_left = document.getElementById('add_user_button_left');
+    var user_list_button = document.getElementById('user_list_button');
+    var community_list_button = document.getElementById('community_list_button');
+    var switch_user_button = document.getElementById('switch_user_button');
+    var tag_panel_button = document.getElementById('tag_panel_button');
+    var change_password_button = document.getElementById('change_password_button');
+    var logout_button = document.getElementById('logout_button');
+
+
+    switch_user_button.addEventListener("click",function(){
+        $.confirm({
+            title: 'Switch As User',
+            boxWidth: '25%',
+            theme: 'material',
+            // backgroundDismissAnimation: 'random',
+            useBootstrap: false,
+            content: 'Do you really want switch state...',
+            buttons: {
+                Yes: {
+                    btnClass: 'btn-green',
+                    action: function(){
+
+                    }
+                },
+                No: {
+                    btnClass: 'btn-red',
+                    action: function(){
+
+                    }
+                }
+            }
+        });
+    })
+
+    logout_button.addEventListener("click",function(event){
+        $.confirm({
+            title: 'Confirm Logout',
+            boxWidth: '20%',
+            theme: 'supervan',
+            backgroundDismissAnimation: 'random',
+            useBootstrap: false,
+            content: 'Do you really want logout?',
+            buttons: {
+                Yes: function () {
+                    window.location = '/logout';
+                },
+                No: function () {
+                // $.alert('No');
+                }
+            }
+        });
+    });
+
+    profile_button.addEventListener("click",function(event){
+        window.location = '/profile'
+    })
+
+    profile_button_left.addEventListener("click",function(event){
+        window.location = '/<%= data[0].role%>/profile'
+    });
+    
+    change_password_button.addEventListener('click',function(event){
+        window.location = '/changePassword';
+    });
+
+    add_user_button_left.addEventListener('click',function(event){
+        window.location = '/<%= data[0].role%>/adduser';
+    });
+
+    tag_panel_button.addEventListener("click",function(event){
+        window.location = '/tag';
+    });
+
+    user_list_button.addEventListener("click",function(event){
+        window.location = '/<%=data[0].role%>/userlist';
+    });
+</script>

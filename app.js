@@ -82,9 +82,54 @@ app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/login.html' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    console.log(req.session.passport.user);
-    res.redirect('/admin/profile');
-  });
+    userdetails.find({
+        email: req.session.passport.user._json.email
+    }).exec(function(error,data){
+        if(data.length != 0){
+            req.session.isLogin = 1;
+            req.session.userName = data.username;
+            req.session.passWord = data.password;
+            req.session.data = data;
+            req.session.data.image = "default.png"
+            res.redirect('/' + data[0].role + '/profile');
+        } else{
+            var data = new Object({
+                name: req.session.passport.user._json.name,
+                email: req.session.passport.user._json.email,
+                city: req.session.passport.user._json.location,
+                status: "pending",
+                dob: "11/08/1998",
+                phoneno: "7657897387",
+                gender: "male",
+                image: "default.png",
+                role: "user",
+                flag: "1",
+                password: "f"
+            });
+            req.session.isLogin = 1;
+            let newUser = new userdetails(data);
+            newUser.save().then(result=>{
+                req.session.data = [result];
+                console.log("User added via Github");
+                var mailData = {
+                    from: "rajat.sharma1043@gmail.com",
+                    to: req.session.data[0].email,
+                    subject: "Code Quotient Confirmation Mail",
+                    text: "Hello " + req.session.data[0].name + " this is confirmation mail. Your Password is " + req.session.data[0].password + "."
+                }
+                smtpTransport.sendMail(mailData,function(error,info){
+                    if(error){
+                        console.log(mailData.to)
+                        console.log(error)
+                    } else{
+                        console.log("Mail sent: "+ info.response);
+                    }
+                })
+                res.redirect('/editProfile');
+            });
+        }
+    });
+});
 
 const storage = multer.diskStorage({
     destination: './public/uploads',
@@ -94,6 +139,7 @@ const storage = multer.diskStorage({
         req.session.data[0].image = req.session.data[0]._id + path.extname(file.originalname);
     }
 })
+
 const upload = multer({
     storage: storage,
     limits: {
@@ -315,21 +361,145 @@ app.post('/admin/adduser',function (req, res) {
          }
      });
   })
+  
 
-  app.post('/getUserData',function(req,res){
-      userdetails.countDocuments(function(error,count){
-          var start = parseInt(req.body.start);
-          var len = parseInt(req.body.length);
-          userdetails.find({}).skip(start).limit(len)
-          .then(data=>{
-            //   console.log(data)
-              res.send({"recordsTotal" : count, "recordsFiltered": count,data})
-          })
-          .catch(err=>{
-              res.send(err);
-          })
-      })
+// app.post('/getUserData',function(req,res){
+//       userdetails.countDocuments(function(error,count){
+//           var start = parseInt(req.body.start);
+//           var len = parseInt(req.body.length);
+//           userdetails.find({}).skip(start).limit(len)
+//           .then(data=>{
+//             //   console.log(data)
+//               res.send({"recordsTotal" : count, "recordsFiltered": count,data})
+//           })
+//           .catch(err=>{
+//               res.send(err);
+//           })
+//       })
+//   });
+
+  app.post('/sendMail',function(req,res){
+    console.log(req.body);
+    var mailOptions={
+        to : req.body.to,
+        subject : req.body.subject,
+        text : req.body.text
+    }
+    console.log(mailOptions);
+    smtpTransport.sendMail(mailOptions, function(error, response){
+     if(error){
+            console.log(error);
+        res.end("error");
+     }else{
+            console.log("Message sent: " + response.message);
+        res.end("sent");
+         }
   });
+  
+  });
+
+app.post("/updateState", function (request, response) {
+	userdetails.updateOne({_id: request.body.id}, {flag: request.body.state}).exec(data => console.log("state updated"));
+	response.send("state updated");
+})
+
+app.post("/getUserData", function (req, res) {
+	var flag;
+	if(req.body.role === 'All' && req.body.status === 'All') {
+      userdetails.countDocuments(function(e,count){
+      var start = parseInt(req.body.start);
+      var len = parseInt(req.body.length);
+      userdetails.find({
+      }).skip(start).limit(len).then(data=> {
+      	if(req.body.search.value) {
+					data = data.filter((value) => {
+						flag = value.email.includes(req.body.search.value) || value.phoneno.includes(req.body.search.value)
+						 || value.city.includes(req.body.search.value) || value.status.includes(req.body.search.value) 
+						 || value.role.includes(req.body.search.value);
+						return flag;
+					})
+				}
+                res.send({"recordsTotal": count, "recordsFiltered" : count, data})
+                }).catch(err => {
+      	    res.send(err)
+     	})
+   });
+}
+
+else if(req.body.role === 'All' && req.body.status !== 'All')
+{
+  console.log(req.body);
+  var length;
+      userdetails.countDocuments(function(e,count){
+      var start=parseInt(req.body.start);
+      var len=parseInt(req.body.length);
+
+      userdetails.find({status: req.body.status}).then(data => length = data.length);
+
+      userdetails.find({ status: req.body.status }).skip(start).limit(len)
+	    .then(data=> {
+      if (req.body.search.value){
+				data = data.filter((value) => {
+					flag = value.email.includes(req.body.search.value) || value.phoneno.includes(req.body.search.value)
+						 || value.city.includes(req.body.search.value) || value.status.includes(req.body.search.value) 
+						 || value.role.includes(req.body.search.value);
+						return flag;
+					});
+			}
+      res.send({"recordsTotal": count, "recordsFiltered" : length, data})
+     	}).catch(err => {
+      	res.send(err)
+     })
+   });  
+}
+
+else if(req.body.role !== 'All' && req.body.status === 'All')
+{
+	console.log(req.body);
+	var length;
+	userdetails.countDocuments(function(e,count){
+		var start=parseInt(req.body.start);
+		var len=parseInt(req.body.length);
+
+		userdetails.find({role: req.body.role}).then(data => length = data.length);
+	  userdetails.find({ role: req.body.role }).skip(start).limit(len).then(data=> {
+      if (req.body.search.value) {
+				data = data.filter((value) => {
+					flag = value.email.includes(req.body.search.value) || value.phoneno.includes(req.body.search.value)
+						 || value.city.includes(req.body.search.value) || value.status.includes(req.body.search.value) 
+						 || value.role.includes(req.body.search.value);
+						return flag;
+				})
+			}
+            res.send({"recordsTotal": count, "recordsFiltered" : length, data})
+        }).catch(err => {
+      	res.send(err)
+        })
+   }); 
+}
+	else {
+		var length;
+		userdetails.countDocuments(function(e,count){
+			var start=parseInt(req.body.start);
+			var len=parseInt(req.body.length);
+			userdetails.find({role: req.body.role, status: req.body.status}).then(data => length = data.length);
+
+      userdetails.find({role: req.body.role, status: req.body.status}).skip(start).limit(len).then(data=> {
+			if(req.body.search.value) {
+				data = data.filter((value) => {
+					flag = value.email.includes(req.body.search.value) || value.phoneno.includes(req.body.search.value)
+						 || value.city.includes(req.body.search.value) || value.status.includes(req.body.search.value) 
+						 || value.role.includes(req.body.search.value);
+						return flag;
+					})
+				}
+			    res.send({"recordsTotal": count, "recordsFiltered" : length, data})
+                }).catch(err => {
+      	        res.send(err)
+            })
+        }); 
+	}
+})
 
 app.listen(8000);
 

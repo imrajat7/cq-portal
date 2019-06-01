@@ -311,7 +311,7 @@
     </div>
 </body>
 <script>
-    var asc = <%- JSON.stringify(data)%>;
+	var asc = <%-  JSON.stringify(data) %>;
     var span = menu.getElementsByTagName("span");
     var div = menu.getElementsByTagName('div');
     for(var i=0;i<div.length;i++){
@@ -319,19 +319,6 @@
     }
     
     div[3].classList.add("active");
-
-    var profile_button = document.getElementById("profile_button");
-    
-    //Buttons on Left Navigation Drawer
-    var profile_button_left = document.getElementById('profile_button_left');
-    var add_user_button_left = document.getElementById('add_user_button_left');
-    var user_list_button = document.getElementById('user_list_button');
-    var community_list_button = document.getElementById('community_list_button');
-    var switch_user_button = document.getElementById('switch_user_button');
-    var tag_panel_button = document.getElementById('tag_panel_button');
-    var change_password_button = document.getElementById('change_password_button');
-    var logout_button = document.getElementById('logout_button');
-
 
     $(document).ready(function(){
       $("#sideBtn").click(function(){
@@ -345,49 +332,6 @@
       });
    });
 
-    profile_button.addEventListener("click",function(event){
-        window.location = '/profile'
-    })
-
-    change_password_button.addEventListener('click',function(event){
-        window.location = '/changePassword';
-    });
-
-    add_user_button_left.addEventListener('click',function(event){
-        window.location = '/<%= data[0].role%>/adduser';
-    });
-
-    profile_button_left.addEventListener("click",function(event){
-        window.location = '/<%= data[0].role%>/profile';
-    });
-
-    tag_panel_button.addEventListener("click",function(event){
-        window.location = '/tag';
-    });
-
-    user_list_button.addEventListener("click",function(event){
-        window.location = '/<%=data[0].role%>/userlist';
-    });
-
-    logout_button.addEventListener("click",function(event){
-        $.confirm({
-            title: 'Confirm Logout',
-            boxWidth: '20%',
-            theme: 'supervan',
-            // backgroundDismissAnimation: 'random',
-            useBootstrap: false,
-            content: 'Do you really want logout?',
-            buttons: {
-                Yes: function () {
-                    window.location = '/logout';
-                },
-                No: function () {
-                // $.alert('No');
-                }
-            }
-        });
-    });
-
     $(document).ready(function() {
 		$.ajax({
 			url: initTable(),
@@ -396,18 +340,22 @@
 			}
 		});
 	});
-
 	function initTable() {
-		$('#myTable').DataTable({
+		let table = $('#myTable').DataTable({
 			"processing": true,
 			"serverSide": true,
 			"ajax": {
 				"url": "/getUserData",
-				"type": "POST", 
+				"type": "POST",
+				"async": false,
+				"data": function( d ) {
+					d.role   = $('#role').val();
+					d.status = $('#filter').val();
+				},
 			},
 			"columns": [
-				{ "data" : "name" },
 				{ "data" : "email" },
+				{ "data" : "phoneno" },
 				{ "data" : "city" },
 				{ "data" : "status" },
 				{ "data" : "role",
@@ -415,27 +363,35 @@
 				{ "data" : null },
 			],
 			"columnDefs": [{
-                "targets": -1,
-                "render": function (data, type, row, meta) {
-                   data = '<center class="actions"></center>';
-               		return data;
-                }
-            }],
+					"targets": -1,
+					"render": function (data, type, row, meta) {
+							data = '<center class="actions"></center>';
+						return data;
+					}
+			}],
 		});
+		$('#role').on('click', function() {
+			table.ajax.reload(null, false);
+			appendBtns();
+		})
+		$('#filter').on('click', function() {
+				table.ajax.reload(null, false);
+				appendBtns();
+		})
+		$('#refresh').on('click', function() {
+			table.ajax.reload(null, false);
+			appendBtns();
+		})
 	}
 	function appendBtns() {
 		var actionsCol = document.getElementsByClassName("actions");
 		var roleCol = document.getElementsByClassName("role");
-		var refreshBtn = document.getElementById("refresh");
 		var sendToInput = document.getElementById("sendTo");
 		var emailSubject = document.getElementById("emailSubject");
 		var emailSendBtn = document.getElementById("sendMail");
-		refreshBtn.addEventListener("click", function () {
-			window.location.reload();
-		})
 		for(var i = 1;i<roleCol.length;i++ ) {
 			state = asc[i-1].flag;
-			if(roleCol[i].innerHTML == "admin" || roleCol[i].innerHTML == "user") {
+			if(roleCol[i].innerHTML == "admin" || roleCol[i].innerHTML == "user" || roleCol[i].innerHTML=='community builder') {
 				let emailBtn = document.createElement("button");
 				let editBtn = document.createElement("button");
 				let stateBtn = document.createElement("button");
@@ -477,7 +433,8 @@
 						$('#editModal').modal("hide");
 					})
 					setInterval(function () {
-						if(($("#editModal").hasClass('show')) == false) {
+						if(($("#editModal"
+						).hasClass('show')) == false) {
 							usernameTitle.innerHTML = "Update ";
 						}	
 					}, 1000);
@@ -503,7 +460,7 @@
 							to: sendTo.value,
 							from: "ridhavrm@gmail.com",
 							subject: emailSubject.value,
-							text: $('#textarea').val(),
+							html: $('#textarea').val(),
 						});
 						var req = new XMLHttpRequest();
 						req.open("POST", "/sendMail");
@@ -514,6 +471,16 @@
 				
 				stateBtn.setAttribute("id", asc[i - 1]._id);
 				stateBtn.addEventListener("click", function (event) {
+					var id;
+					if(event.target.tagName == "SPAN")
+						id = event.target.parentNode.getAttribute("id");
+					else
+						id = event.target.getAttribute("id");
+						for(var j = 0;j<asc.length;j++) {
+							if((asc[j]._id) == id) {
+								state = asc[j].flag;		
+							}
+						}
 					if(state == "0") {
 						stateBtn.classList.remove("btn-warning");
 						stateBtn.classList.add("actions-btn", "btn", "btn-success");
@@ -527,11 +494,6 @@
 						stateBtn.childNodes[0].setAttribute("class", "fa fa-times-circle");
 						state = "0";
 					}	
-					var id;
-					if(event.target.tagName == "SPAN")
-						id = event.target.parentNode.getAttribute("id");
-					else
-						id = event.target.getAttribute("id");
 					var req = new XMLHttpRequest();
 					req.open("POST", "/updateState");
 					req.setRequestHeader("Content-Type", "application/json");
