@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>User List</title>
-	<link rel="stylesheet" href="/trumbowyg.css">
+	<title>Community List</title>
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -19,7 +18,7 @@
 	<script src="/trumbowyg.min.js"></script>
     <script>
         $(document).ready( function () {
-        $('#example').DataTable();
+        $('#myTable').DataTable();
         } );
     </script>
     <style>
@@ -50,18 +49,18 @@
             font-weight: bold;
 		}
 		nav span {
-			float: right;
-			padding: .2em .6em .3em;
-			margin-top: 22px;
-			margin-left: 5px;
-			font-size: 75%;
-			line-height: 1;
-			font-weight: 700;
-			color: #fff;
-			font-size: 14px;
-			vertical-align: center;
-			border-radius: .25em;
-			vertical-align: baseline;
+            float: right;
+            padding: .2em .6em .3em;
+            margin-top: 22px;
+            margin-left: 5px;
+            font-size: 75%;
+            line-height: 1;
+            font-weight: 700;
+            color: #fff;
+            font-size: 14px;
+            vertical-align: center;
+            border-radius: .25em;
+            vertical-align: baseline;
 		}
 		nav img {
 			float: right;
@@ -69,13 +68,13 @@
 			padding: 15px;
         }
 		#menu {
-			padding-top: 60px;
-			background-color: #000;
-			width: 50px;
-			height:100vh;
-			color:white;
-			box-sizing: border-box;
-			overflow:hidden;
+            padding-top: 60px;
+            background-color: #000;
+            width: 50px;
+            height:100vh;
+            color:white;
+            box-sizing: border-box;
+            overflow:hidden;
 		}
 		.fa {
 			color: #fff;
@@ -110,17 +109,18 @@
             cursor: pointer;
         }
         #body_div{
-						position:absolute;
-						left:50px;
-						right:0;
-						top:64px;
-						bottom:0;
-						margin-left: 0.5%;
-						overflow:auto;
+			position:absolute;
+			left:50px;
+			right:0;
+			top:64px;
+			bottom:0;
+			margin-left: 0.5%;
+			overflow:auto;
         }
         table{
             min-width: 50%;
             width: auto;
+            border: 1px solid rgb(201, 201, 201);
         }
         #tag {
 			width: 100px;
@@ -278,7 +278,7 @@
 	</div>
     <div id="body_div">
         <div id="head-btns">
-                <span id="tag">User List</span>
+                <span id="tag">Community List</span>
                 <select id="role">
                     <option value="All">All</option>
                     <option value="Admins">Admins</option>
@@ -295,12 +295,14 @@
         <table id="myTable" class="display" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Username/Email</th>
-                        <th>Phone</th>
-                        <th>City</th>
-                        <th>Status</th>
-                        <th>Role</th>
-                        <th>Action</th>
+                        <th>Community Name</th>
+                        <th>Membership Rule</th>
+                        <th>Community Location</th>
+                        <th>Community Owner</th>
+                        <th>Community Owner</th>
+                        <th>Create Date</th>
+                        <th>Actions</th>
+                        <th>Community Pic</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -310,14 +312,13 @@
     </div>
 </body>
 <script>
-	var asc = <%-  JSON.stringify(data) %>;
     var span = menu.getElementsByTagName("span");
     var div = menu.getElementsByTagName('div');
     for(var i=0;i<div.length;i++){
         div[i].classList.remove("active");
     }
     
-    div[3].classList.add("active");
+    div[4].classList.add("active");
 
     $(document).ready(function(){
       $("#sideBtn").click(function(){
@@ -331,229 +332,5 @@
       });
    });
 
-    $(document).ready(function() {
-		$.ajax({
-			url: initTable(),
-			success: function () {
-				appendBtns();
-			}
-		});
-	});
-	function initTable() {
-		let table = $('#myTable').DataTable({
-			"processing": true,
-			"serverSide": true,
-			"ajax": {
-				"url": "/getUserData",
-				"type": "POST",
-				"async": false,
-				"data": function( d ) {
-					d.role   = $('#role').val();
-					d.status = $('#filter').val();
-				},
-			},
-			"columns": [
-				{ "data" : "email" },
-				{ "data" : "phoneno" },
-				{ "data" : "city" },
-				{ "data" : "status" },
-				{ "data" : "role",
-				  "class": "role" },
-				{ "data" : null },
-			],
-			"columnDefs": [{
-					"targets": -1,
-					"render": function (data, type, row, meta) {
-							data = '<center class="actions"></center>';
-						return data;
-					}
-			}],
-		});
-		$('#role').on('click', function() {
-			table.ajax.reload(null, false);
-			appendBtns();
-		})
-		$('#filter').on('click', function() {
-				table.ajax.reload(null, false);
-				appendBtns();
-		})
-		$('#refresh').on('click', function() {
-			table.ajax.reload(null, false);
-			appendBtns();
-		})
-	}
-	function appendBtns() {
-		var actionsCol = document.getElementsByClassName("actions");
-		var roleCol = document.getElementsByClassName("role");
-		var sendToInput = document.getElementById("sendTo");
-		var emailSubject = document.getElementById("emailSubject");
-		var emailSendBtn = document.getElementById("sendMail");
-		for(var i = 1;i<roleCol.length;i++ ) {
-			state = asc[i-1].flag;
-			if(roleCol[i].innerHTML == "admin" || roleCol[i].innerHTML == "user" || roleCol[i].innerHTML=='community builder') {
-				let emailBtn = document.createElement("button");
-				let editBtn = document.createElement("button");
-				let stateBtn = document.createElement("button");
-				let usernameTitle = document.getElementById("usernameTitle");
-				let span = document.createElement("span");
-				emailBtn.classList.add("actions-btn", "btn", "btn-dark");
-				editBtn.classList.add("actions-btn", "btn", "btn-primary");
-				editBtn.setAttribute("id", "edit" + asc[i - 1]._id);
-				editBtn.addEventListener("click", function () {
-					$('#editModal').modal();
-					var id;
-					if(event.target.tagName == "SPAN")
-						id = event.target.parentNode.getAttribute("id");
-					else
-						id = event.target.getAttribute("id");
-					for(var j = 0;j<asc.length;j++) {
-						if(("edit" + asc[j]._id) == id) {
-							usernameTitle.innerHTML += asc[j].email;		
-						}
-					}
-					var editUserName = document.getElementById("editUserName");
-					var editCity = document.getElementById("editCity");
-					var editStatus = document.getElementById("editStatus");
-					var editRole = document.getElementById("editRole");
-					var editPhoneNo = document.getElementById("editPhoneNo");
-					var updateBtn = document.getElementById("updateBtn");
-					updateBtn.addEventListener("click", function () {
-						var data = new Object({
-							name: editUserName.value,
-							city: editCity.value,
-							phoneno: editPhoneNo.value,
-							role: editRole.value,
-							status: editStatus.value,
-						});
-						var request = new XMLHttpRequest();
-						request.open("POST", "/updateUser");
-						request.setRequestHeader("Content-Type", "application/json");
-						request.send(JSON.stringify(data));	
-						$('#editModal').modal("hide");
-					})
-					setInterval(function () {
-						if(($("#editModal"
-						).hasClass('show')) == false) {
-							usernameTitle.innerHTML = "Update ";
-						}	
-					}, 1000);
-					
-				});
-				emailBtn.setAttribute("id", "email" + asc[i - 1]._id);
-				emailBtn.addEventListener("click", function (event) {
-					$("#emailModal").modal();
-					var id;
-					if(event.target.tagName == "SPAN")
-						id = event.target.parentNode.getAttribute("id");
-					else
-						id = event.target.getAttribute("id");
-					for(var j = 0;j<asc.length;j++) {
-						if(("email" + asc[j]._id) == id) {
-							sendToInput.value = asc[j].email;		
-						}
-					}
-					$.trumbowyg.svgPath = "/trumbowyg.svg"
-					$("#textarea").trumbowyg();
-					emailSendBtn.addEventListener("click", function () {
-						var data = new Object({
-							to: sendTo.value,
-							from: "ridhavrm@gmail.com",
-							subject: emailSubject.value,
-							html: $('#textarea').val(),
-						});
-						var req = new XMLHttpRequest();
-						req.open("POST", "/sendMail");
-						req.setRequestHeader("Content-Type", "application/json");
-						req.send(JSON.stringify(data));
-					})
-				});
-				
-				stateBtn.setAttribute("id", asc[i - 1]._id);
-				stateBtn.addEventListener("click", function (event) {
-					var id;
-					if(event.target.tagName == "SPAN")
-						id = event.target.parentNode.getAttribute("id");
-					else
-						id = event.target.getAttribute("id");
-						for(var j = 0;j<asc.length;j++) {
-							if((asc[j]._id) == id) {
-								state = asc[j].flag;		
-							}
-						}
-					if(state == "0") {
-						stateBtn.classList.remove("btn-warning");
-						stateBtn.classList.add("actions-btn", "btn", "btn-success");
-						stateBtn.childNodes[0].classList.remove("fa", "fa-times-circle");
-						stateBtn.childNodes[0].setAttribute("class", "fa fa-check-circle");
-						state = "1";
-					} else {
-						stateBtn.classList.remove("btn-success");
-						stateBtn.classList.add("actions-btn", "btn", "btn-warning");	
-						stateBtn.childNodes[0].classList.remove("fa", "fa-check-circle");
-						stateBtn.childNodes[0].setAttribute("class", "fa fa-times-circle");
-						state = "0";
-					}	
-					var req = new XMLHttpRequest();
-					req.open("POST", "/updateState");
-					req.setRequestHeader("Content-Type", "application/json");
-					req.send(JSON.stringify({id: id, state: state}));
-					window.location.reload();
-				})
-				if(state == "0") {
-					stateBtn.classList.add("actions-btn", "btn", "btn-success");	
-					span.setAttribute("class", "fa fa-check-circle");	
-				} else {
-					stateBtn.classList.add("actions-btn", "btn", "btn-warning");	
-					span.setAttribute("class", "fa fa-times-circle");
-				}
-				stateBtn.appendChild(span); 
-				span = document.createElement("span");
-				span.setAttribute("class", "fa fa-envelope");
-				emailBtn.appendChild(span);
-				span = document.createElement("span");
-				span.setAttribute("class", "fa fa-edit");
-				editBtn.appendChild(span);
-				actionsCol[i - 1].appendChild(emailBtn);
-				actionsCol[i - 1].appendChild(editBtn);
-				actionsCol[i - 1].appendChild(stateBtn);
-			} else if( roleCol[i].innerHTML == "superadmin") {
-				var emailBtn = document.createElement("button");
-				emailBtn.classList.add("actions-btn", "btn", "btn-dark");
-				emailBtn.setAttribute("id", "email" + asc[i - 1]._id);
-				emailBtn.addEventListener("click", function (event) {
-					$("#emailModal").modal();
-					var id;
-					if(event.target.tagName == "SPAN")
-						id = event.target.parentNode.getAttribute("id");
-					else
-						id = event.target.getAttribute("id");
-					for(var j = 0;j<asc.length;j++) {
-						if(("email" + asc[j]._id) == id) {
-							sendToInput.value = asc[j].email;		
-						}
-					}
-					
-					$.trumbowyg.svgPath = "/trumbowyg.svg"
-					$("#textarea").trumbowyg();
-					emailSendBtn.addEventListener("click", function () {
-						var data = new Object({
-							to: sendTo.value,
-							from: "ridhavrm@gmail.com",
-							subject: emailSubject.value,
-							text: $("#textarea").val(),
-						});
-						var req = new XMLHttpRequest();
-						req.open("POST", "/sendMail");
-						req.setRequestHeader("Content-Type", "application/json");
-						req.send(JSON.stringify(data));
-					})
-				});
-				var span = document.createElement("span");
-				span.setAttribute("class", "fa fa-envelope");
-				emailBtn.appendChild(span);
-				actionsCol[i - 1].appendChild(emailBtn);
-			}
-		}
-	}
 </script>
 </html>

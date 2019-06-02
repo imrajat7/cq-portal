@@ -227,6 +227,9 @@
         div[i].classList.remove("active");
     }
     
+    if("<%=data[0].role%>" == 'admin')
+    div[1].classList.add("active");
+    else
     div[1].classList.add("active");
 
     var edit_button = document.getElementById("edit_button");
@@ -234,11 +237,11 @@
 	$(document).ready(function(){
       $("#sideBtn").click(function(){
          if($("#menu").width() == 50){
-            $("#menu").animate({width: '250px'},400);
-            $("#body_internal_div").animate({left:'20%'},400);
+            $("#menu").animate({width: '250px'},250);
+            $("#body_internal_div").animate({left:'20%'},300);
          } else{
             $("#menu").animate({width: '50px'},400);
-            $("#body_internal_div").animate({left:'14%'},400);
+            $("#body_internal_div").animate({left:'14%'},300);
             }
         });
     });

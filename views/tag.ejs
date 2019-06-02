@@ -146,7 +146,7 @@
             width: 100%;
             margin-top: 4%;
         }
-        #submit_button{
+        #submit_tag_button{
             color: #fff;
             width: inherit;
             height: 35px;
@@ -160,7 +160,7 @@
             vertical-align: middle;
             line-height: 1.42857143;
         }
-        #submit_button:hover{
+        #submit_tag_button:hover{
             color: #fff;
             background-color: #2e6da4;
         }
@@ -200,10 +200,10 @@
                 <h2>Create Tag</h2>
             </div>
             <div id="input_div">
-                <input type="text" placeholder="Tag Name">
+                <input type="text" placeholder="Tag Name" id="create_tag_input">
             </div>
             <div id="button_div">
-                <button id="submit_button">Submit</button>
+                <button id="submit_tag_button">Submit</button>
             </div>
         </div>
         <div id="tags_list_div">
@@ -222,6 +222,39 @@
     }
     
     div[6].classList.add("active");
+
+    var tags_list_button = document.getElementById('tags_list_button');
+    var create_tag_input = document.getElementById('create_tag_input');
+    var submit_tag_button = document.getElementById('submit_tag_button');
+
+    tags_list_button.addEventListener('click',function(){
+        window.location = '/tag/tagslist';
+    });
+
+    submit_tag_button.addEventListener('click',function(){
+        var date = new Date();
+        var tagdata = new Object();
+        tagdata.name = create_tag_input.value;
+        tagdata.creationdate = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        tagdata.flag = 0;
+        var request = new XMLHttpRequest();
+        request.open('POST','/tag');
+        request.setRequestHeader('Content-Type','application/json');
+        request.send(JSON.stringify(tagdata));
+        request.onload = function(){
+            var dataReturned = request.responseText;
+            if(dataReturned==""||dataReturned==null){
+            alert('Error in Adding Tag!!!');
+            window.location = '/tag';
+            }
+            else{
+                console.log(dataReturned);
+                alert('Tag added correctly');
+                window.location = '/tag';
+            }
+        }
+    })
+
 
     $(document).ready(function(){
       $("#sideBtn").click(function(){

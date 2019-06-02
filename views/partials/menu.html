@@ -1,12 +1,12 @@
 <nav>
     <p>cq</p>
     <img src="https://via.placeholder.com/30" alt="" id="profile_button">
-    <span style="background: #5cb85c"><%= data[0].role%></span>
+    <span style="background: #5cb85c" id="role_on_top"><%= data[0].role%></span>
     <span style="background: #f0ad4e"><%= data[0].name%></span>
 </nav>
 <div id="menu">
     <div class="menu-item" id="sideBtn"><i class="fa fa-bars"></i><span>cq</span></div>
-    <div class="menu-item active" id="profile_button_left"><i class="fa fa-home"></i><span>Home</span></div>
+    <div class="menu-item active" id="profile_button_left"><i class="fa fa-user"></i><span>Home</span></div>
     <div class="menu-item" id="add_user_button_left"><i class="fa fa-plus-square"></i><span>Add User</span></div>
     <div class="menu-item" id="user_list_button"><i class="fa fa-list-ul"></i><span>Users List</span></div>
     <div class="menu-item" id="community_list_button"><i class="fa fa-list-alt"></i><span>Community List</span></div>
@@ -29,6 +29,35 @@
     var change_password_button = document.getElementById('change_password_button');
     var logout_button = document.getElementById('logout_button');
 
+    if("<%=data[0].role%>" == 'admin'){
+        profile_button.addEventListener("click",function(event){
+            window.location = '/profile'
+        })
+
+        profile_button_left.addEventListener("click",function(event){
+            window.location = '/<%= data[0].role%>/profile'
+        });
+        
+        change_password_button.addEventListener('click',function(event){
+            window.location = '/changePassword';
+        });
+
+        add_user_button_left.addEventListener('click',function(event){
+            window.location = '/<%= data[0].role%>/adduser';
+        });
+
+        tag_panel_button.addEventListener("click",function(event){
+            window.location = '/tag';
+        });
+
+        user_list_button.addEventListener("click",function(event){
+            window.location = '/<%=data[0].role%>/userlist';
+        });
+
+        community_list_button.addEventListener('click',function(){
+            window.location = '/community/communityList';
+        });
+    }
 
     switch_user_button.addEventListener("click",function(){
         $.confirm({
@@ -74,27 +103,33 @@
         });
     });
 
-    profile_button.addEventListener("click",function(event){
-        window.location = '/profile'
-    })
+    if("<%=data[0].role%>" == 'user'){
+        if("<%=data[0].dob%>" == ""){
+            $("#menu").css("display", "none");
+            $("#role_on_top").css("display","none");
+        }else{
+            $("#menu").css("display","block");
+            $("#role_on_top").remove();
+            $("#add_user_button_left").remove();
+            $("#user_list_button").remove();
+            $("#switch_user_button").remove();
+            $("#tag_panel_button").remove();
+        }
+        change_password_button.addEventListener('click',function(event){
+            window.location = '/changePassword';
+        });
 
-    profile_button_left.addEventListener("click",function(event){
-        window.location = '/<%= data[0].role%>/profile'
-    });
-    
-    change_password_button.addEventListener('click',function(event){
-        window.location = '/changePassword';
-    });
+        profile_button.addEventListener("click",function(event){
+            window.location = '/profile'
+        })
 
-    add_user_button_left.addEventListener('click',function(event){
-        window.location = '/<%= data[0].role%>/adduser';
-    });
+        profile_button_left.addEventListener("click",function(event){
+            window.location = '/profile'
+        });
 
-    tag_panel_button.addEventListener("click",function(event){
-        window.location = '/tag';
-    });
-
-    user_list_button.addEventListener("click",function(event){
-        window.location = '/<%=data[0].role%>/userlist';
-    });
+        community_list_button.addEventListener('click',function(){
+            // window.location = '/community/communityList';
+            alert('Hello I am community button');
+        });
+    }
 </script>

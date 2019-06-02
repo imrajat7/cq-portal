@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tags List</title>
+    <link rel="stylesheet" href="/trumbowyg.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script src="/trumbowyg.min.js"></script>
+    <script>
+        $(document).ready( function () {
+        $('#myTable').DataTable();
+        } );
+    </script>
+    <style>
+        *{
+          box-sizing: border-box;
+        }
+        body{
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          background: #f5f5f5;
+          font-family: 'Roboto', sans-serif;
+				}
+				nav{
+            position: absolute;
+            width:100%;
+            height: 60px;
+						background-color: #222D3C;
+            color: #fff;
+				}
+				nav p {
+						margin: 0;
+            float: left;
+            height: 50px;
+            padding: 15px 15px;
+            font-size: 20px;
+            line-height: 20px;
+            font-weight: bold;
+				}
+				nav span {
+							float: right;
+							padding: .2em .6em .3em;
+							margin-top: 22px;
+							margin-left: 5px;
+							font-size: 75%;
+							line-height: 1;
+							font-weight: 700;
+							color: #fff;
+							font-size: 14px;
+							vertical-align: center;
+							border-radius: .25em;
+							vertical-align: baseline;
+					}
+					nav img {
+							float: right;
+							border-radius: 50%;
+							padding: 15px;
+        	}
+					#menu {
+							padding-top: 60px;
+							background-color: #000;
+							width: 50px;
+							height:100vh;
+							color:white;
+							box-sizing: border-box;
+							overflow:hidden;
+					}
+					.fa {
+							color: #fff;
+							font-size: 25px;
+							width: 30px;
+							margin: 6px 15px;
+							margin-left: 11px;
+							box-sizing: border-box;
+					}
+					.menu-item {
+							width: 250px;
+							cursor: pointer;
+							opacity: 0.8;
+							color: #fff;
+							font-family: sans-serif;
+							font-size: 14px;
+							padding-top: 10px;
+					}
+					.menu-item:hover {
+							border-left: 2px solid red;
+							opacity: 1;
+							background-color: #4d5866;
+					}
+					#user_icon{
+							height:100%;
+							width: 10%;
+					}
+					.active{
+							background: #51a1e2 !important;
+					}
+					#profile_button{
+							cursor: pointer;
+					}
+					#body_div{
+							position:absolute;
+							left:50px;
+							right:0;
+							top:64px;
+							bottom:0;
+							margin-left: 0.5%;
+							overflow:auto;
+					}
+					table{
+							min-width: 50%;
+							width: auto;
+							border: 1px solid rgb(201, 201, 201);
+					}
+					#tag {
+							width: 100px;
+							background-color: #2D312C;
+							color: #fff;
+							text-align: center;
+							padding: 6px;
+							border-radius: 4px;
+							box-shadow: 1px 1px 1px #2D312C, -1px -1px 1px #2D312C;
+					}
+					#refresh {
+						background-color: #2D312C;
+						width: 100px;
+						font-size: 18px;
+						padding: 6px;
+						text-align: center;
+						float: right;
+						cursor: pointer;
+					}
+					#head-btns {
+						padding-top: 5px;
+					}
+					.actions-btn {
+						width: 35px;
+						height: 35px;
+						margin: 5px 5px 0;
+						padding: 5px;
+					}
+					.actions-btn span {
+						color: #fff;
+						font-size: 15px;
+						width: auto;
+						margin: 0;
+						box-sizing: initial;
+					}
+    </style>
+</head>
+<body>
+	<% include partials/menu.html %>
+	<div class="modal fade" tabindex="-1" role="dialog" id="editModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+			    <h5 class="modal-title" id="usernameTitle">Update </h5>
+			    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			      <span aria-hidden="true">&times;</span>
+			    </button>
+			  </div>
+			  <div class="modal-body">
+			    <form>
+			    	<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label"><b>Username: </b></label>
+			    		<div class="col-sm-10">
+			    			<input type="text" class="form-control" id="editUserName">
+			    		</div>
+			    	</div>
+			    	<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label"><b>Phone: </b></label>
+			    		<div class="col-sm-10">
+			    			<input type="text" class="form-control" id="editPhoneNo">
+			    		</div>
+			    	</div>
+			    	<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label"><b>City: </b></label>
+			    		<div class="col-sm-10">
+			    			<input type="text" class="form-control" id="editCity">
+			    		</div>
+			    	</div>
+			    	<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label"><b>Status: </b></label>
+			    		<div class="col-sm-10">
+			    			<select class="form-control" id="editStatus">
+			    				<option>Confirmed</option>
+			    				<option>Pending</option>
+			    			</select>
+			    		</div>
+			    	</div>
+			    	<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label"><b>Role: </b></label>
+			    		<div class="col-sm-10">
+			    			<select class="form-control" id="editRole">
+			    				<option>User</option>
+			    				<option>Community Builder</option>
+			    				<option>Admin</option>
+			    			</select>
+			    		</div>
+			    	</div>
+			    	<div class="form-group row">
+			    		<div class="col-sm-10">
+			    			<button type="button" class="btn btn-secondary" id="updateBtn">Update</button>
+			    		</div>
+			    	</div>
+			    </form>
+			  </div>
+			  <div class="modal-footer">
+			    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" tabindex="-1" role="dialog" id="emailModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+			    <h5 class="modal-title">Send Reminder Mail</h5>
+			    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			      <span aria-hidden="true">&times;</span>
+			    </button>
+			  </div>
+			  <div class="modal-body">
+			    <form>
+			    	<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label"><b>To: </b></label>
+			    		<div class="col-sm-10">
+			    			<input type="text" readonly class="form-control" id="sendTo">
+			    		</div>
+			    	</div>
+			    	<div class="form-group row">
+			    		<label class="col-sm-2 col-form-label"><b>Subject: </b></label>
+			    		<div class="col-sm-10">
+			    			<input type="text" class="form-control" value="(This mail is from CQ)" id="emailSubject">
+			    		</div>
+			    	</div>
+			    	<div class="form-group row">
+			    		<div class="col-12">
+			    			<textarea style="resize: none;" cols="30" rows="10" class="form-control" id="textarea" ></textarea>
+			    		</div>
+			    	</div>
+			    </form>
+			  </div>
+			  <div class="modal-footer">
+			    <button type="button" class="btn btn-secondary" id="sendMail" data-dismiss="modal">Send</button>
+			  </div>
+			</div>
+		</div>
+	</div>
+    <div id="body_div">
+        <div id="head-btns">
+                <span id="tag">Tags List</span>
+                <span id="refresh" class="fa fa-refresh">Refresh</span>
+        </div>
+        <table id="myTable" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Tag Name</th>
+                        <th>Created By</th>
+                        <th>Create Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+										<%tagdata.forEach(function(d) { %>
+											<td><%=d.tagname%></td>
+											<td><%=d.creator%></td>
+											<td><%=d.creationdate%></td>
+											<td>hello world</td>
+										<%})%>
+                </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    var span = menu.getElementsByTagName("span");
+    var div = menu.getElementsByTagName('div');
+    for(var i=0;i<div.length;i++){
+        div[i].classList.remove("active");
+    }
+    
+    div[6].classList.add("active");
+
+    $(document).ready(function(){
+      $("#sideBtn").click(function(){
+         if($("#menu").width() == 50){
+            $("#menu").animate({width: '250px'},300);
+            $("#body_div").animate({left:'250px'},300);
+         } else{
+            $("#menu").animate({width: '50px'},300);
+            $("#body_div").animate({left:'50px'},300);
+         }
+      });
+   });
+
+</script>
+</html>

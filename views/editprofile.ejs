@@ -332,28 +332,35 @@
         updetail._id = '<%= data[0]._id%>';
         updetail.name = document.getElementById('name_input').value;
         updetail.dob = document.getElementById('dob_input').value;
-        updetail.gender = document.getElementById('select_gender').value;
-        updetail.phoneno = document.getElementById('phoneno_input').value;
-        updetail.city = document.getElementById('city_input').value;
-        updetail.interest = document.getElementById('interest_input').value;
-        updetail.journey = document.getElementById('journey_input').value;
-        updetail.expectation = document.getElementById('expectation_input').value;
-        var request = new XMLHttpRequest();
-        request.open('PUT','/updateUserDetails');
-        request.setRequestHeader('Content-Type','application/json');
-        request.send(JSON.stringify(updetail));
-        request.onload = function(){
-            var dataReturned = request.responseText;
-            if(dataReturned==""||dataReturned==null){
-            alert('Error in Updating Details!!!');
-                window.location = '/profile';
-            }
-            else{
-                console.log(dataReturned);
-                alert('Data Updated correctly');
-                window.location = '/profile';
+        if(updetail.dob == ""){
+            alert("DOB is empty");
+            window.location = '/editprofile'
+        } else{
+            updetail.gender = document.getElementById('select_gender').value;
+            updetail.phoneno = document.getElementById('phoneno_input').value;
+            updetail.city = document.getElementById('city_input').value;
+            updetail.interest = document.getElementById('interest_input').value;
+            updetail.journey = document.getElementById('journey_input').value;
+            updetail.expectation = document.getElementById('expectation_input').value;
+            
+            var request = new XMLHttpRequest();
+            request.open('PUT','/updateUserDetails');
+            request.setRequestHeader('Content-Type','application/json');
+            request.send(JSON.stringify(updetail));
+            request.onload = function(){
+                var dataReturned = request.responseText;
+                if(dataReturned==""||dataReturned==null){
+                alert('Error in Updating Details!!!');
+                    window.location = '/profile';
+                }
+                else{
+                    console.log(dataReturned);
+                    alert('Data Updated correctly');
+                    window.location = '/profile';
+                }
             }
         }
+        
     });
 
 </script>

@@ -18,12 +18,19 @@ loginBtn.addEventListener('click',function(event){
         request.onload = function(){
             var dataReturned = JSON.parse(request.responseText);
             if(dataReturned.length==""){
-                alert('User not exist');
+                alert('Username/Password Incorrect');
                 userName.value="";
                 passWord.value="";
             } else {
-                console.log(dataReturned);
+                if(dataReturned[0].flag=='0'){
+                    window.location = "/404notfound"
+                }
+                else if(dataReturned[0].role === 'admin')
                 window.location = dataReturned[0].role + "/profile";
+                else if(dataReturned[0].status === 'pending')
+                window.location = "editprofile"
+                else if(dataReturned[0].role === 'user')
+                window.location = "/profile";
             }
         }
     }

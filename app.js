@@ -73,7 +73,16 @@ var userSchema = mongoose.Schema({
     image: String
 });
 
+var tagSchema = mongoose.Schema({
+    tagname: String,
+    creator: String,
+	creationdate: String,
+	flag: String
+});
+
 var userdetails = mongoose.model("userdetails", userSchema);
+
+var tagdetails = mongoose.model('tagdetails',tagSchema );
 
 app.get('/auth/github',
   passport.authenticate('github'));
@@ -238,6 +247,24 @@ app.get('/tag',function(req,res){
         res.redirect('/')
 });
 
+app.get('/community/communityList',function(req,res){
+    if(req.session.isLogin){
+        res.render('communitylist',{data: req.session.data});
+    }else{
+        res.redirect('/')
+    }
+});
+
+app.get('/tag/tagslist',function(req,res){
+    if(req.session.isLogin){
+        tagdetails.find({}).exec(function(error, data) {
+			res.render('tagslist', {tagdata: data,data: req.session.data});
+		});
+    } else {
+        res.redirect('/');
+    }
+})
+
 app.get('/',function(req,res){
     if(req.session.isLogin){
         console.log("Already Logged in");
@@ -254,8 +281,9 @@ app.get('/logout',function(req,res){
 });
 
 app.get('/profile',function(req,res){
-    if(req.session.isLogin)
+    if(req.session.isLogin){
         res.render('profile',{data: req.session.data});
+    }
     else
         res.redirect('/');
 })
@@ -305,13 +333,15 @@ app.put('/updateUserDetails',function(req,res){
             gender: req.body.gender,
             phoneno: req.body.phoneno,
             city: req.body.city,
-            image: req.session.data[0].image
+            image: req.session.data[0].image,
+            status: "confirmed"
         },
         {
             new: true,
             runValidators: true
         })
         .then(data=>{
+            req.session.data = [data];
             console.log(data);
             res.send(data);
         })
@@ -331,10 +361,11 @@ app.post('/admin/adduser',function (req, res) {
 	    city: req.body.city,
 	    phoneno: req.body.phoneno, 
 	    gender: "male",
-	    dob: "11/08/1999",
+	    dob: "",
         role: req.body.role,
         status: req.body.status,
-        flag: req.body.flag
+        flag: req.body.flag,
+        image: '/uploads/default.png'
     })
     newUser.save()
      .then(data => {
@@ -361,6 +392,24 @@ app.post('/admin/adduser',function (req, res) {
          }
      });
   })
+
+app.post('/tag',function(req,res){
+    console.log(req.body);
+    let newTag = new tagdetails({
+        tagname: req.body.name,
+        creationdate: req.body.creationdate,
+        creator: req.session.data[0].name,
+        flag: req.body.flag
+    })
+    newTag.save().then(data=>{
+        console.log(data);
+        res.send(data);
+    })
+    .catch(err => {
+        console.error(err)
+        res.send(error)
+    })
+})
   
 
 // app.post('/getUserData',function(req,res){
@@ -499,6 +548,15 @@ else if(req.body.role !== 'All' && req.body.status === 'All')
             })
         }); 
 	}
+})
+
+app.use('/404notfound',function(req,res){
+    if(req.session.isLogin){
+        req.session.isLogin = 0; 
+        res.sendFile(path.join(__dirname,'public','404.html'));
+    } else {
+        res.redirect('/');
+    }
 })
 
 app.listen(8000);
