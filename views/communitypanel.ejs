@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Commuinity Panel</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        body {
+			margin: 0;
+            padding: 0;
+            width: 100%;
+            background: #f5f5f5;
+            font-family: 'Roboto', sans-serif;
+		}
+		nav {
+            position:fixed;
+            width:100%;
+            height: 60px;
+			background-color: #222D3C;
+            color: #fff;
+            z-index: 9999999;
+		}
+		nav p {
+            margin: 0;
+            float: left;
+            height: 50px;
+            padding: 15px 15px;
+            font-size: 20px;
+            line-height: 20px;
+            font-weight: bold;
+		}
+		nav span {
+            float: right;
+            padding: .2em .6em .3em;
+            margin-top: 22px;
+            margin-left: 5px;
+            font-size: 75%;
+            line-height: 1;
+            font-weight: 700;
+            color: #fff;
+            font-size: 14px;
+            vertical-align: center;
+            border-radius: .25em;
+            vertical-align: baseline;
+		}
+		nav img {
+			float: right;
+			border-radius: 50%;
+			padding: 15px;
+        }
+		#menu {
+            position:fixed;
+            padding-top: 60px;
+            background-color: #000;
+            width: 50px;
+            height:100vh;
+            color:white;
+            box-sizing: border-box;
+            overflow:hidden;
+            z-index: 99;
+		}
+		.fa {
+            color: #fff;
+			font-size: 25px;
+			width: 30px;
+			margin: 6px 15px;
+			margin-left: 11px;
+			box-sizing: border-box;
+		}
+		.menu-item {
+            width: 250px;
+			cursor: pointer;
+			opacity: 0.8;
+			color: #fff;
+			font-family: sans-serif;
+			font-size: 14px;
+            padding-top: 10px;
+		}
+		.menu-item:hover {
+			border-left: 2px solid red;
+			opacity: 1;
+			background-color: #4d5866;
+		}
+        .active{
+            background: #51a1e2 !important;
+        }
+        #user_icon{
+            height:100%;
+            width: 10%;
+        }
+        #community_header_div{
+            position: absolute;
+            top:60px;
+            width: 100%;
+            padding-left: 100px;
+            background-color: #3ea7c1;
+            line-height: 50px;
+        }
+
+        #body_internal_div{
+            padding:0;
+            margin:0;
+            position: absolute;
+            left: 14%;
+            top: 20%;
+            width: 72%;
+            height: 550px;
+            border: 1px solid #eeeeee;
+            box-shadow: 0px 1px 10px 0px rgb(201, 201, 201);
+        }
+        .btn{
+            background: transparent;
+            border: 1px solid #fff;
+            width: 50px;
+            color: #fff;
+            cursor: pointer;
+            margin-left: 10px;
+            margin-top: 2px;
+        }
+        #community_header_div button i {
+            padding: 0;
+            margin: 5px;
+            display: block;
+        }
+        #body_internal_header_div{
+            background-color: #3ea7c1;
+            line-height: 50px;
+            font-size: 16px;
+            color: #fff;
+            padding-left: 20px;
+        }
+        #create_button{
+            float: right;
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            cursor: pointer;
+            margin: 10px 10px;
+        }
+    </style>
+</head>
+<body>
+    <% include partials/menu.html %>
+    <div id="community_header_div">
+        <button class="btn"><i class="fa fa-group"></i></button>
+        <button class="btn"><i class="fa fa-search"></i></button>
+    </div>
+    <div id="body_internal_div">
+        <div id="body_internal_header_div">
+                My Communities
+                <button id="create_button">Create</button>
+        </div>
+    </div>
+</body>
+<script>
+    var menu = document.getElementById("menu");
+    var sideBtn = document.getElementById("sideBtn");
+    var body_internal_div = document.getElementById("outer-body-div1");
+    var span = menu.getElementsByTagName("span");
+    var div = menu.getElementsByTagName('div');
+    for(var i=0;i<div.length;i++){
+        div[i].classList.remove("active");
+    }
+    var create=document.getElementById("createCommunity");
+    div[2].classList.add("active");
+
+    var community_header_div = document.getElementById("community_header_div");
+    var create_button = document.getElementById("create_button");
+
+    create_button.addEventListener("click",function(){
+        window.location = '/community/AddCommunity'
+    });
+
+    
+    $(document).ready(function(){
+      $("#sideBtn").click(function(){
+         if($("#menu").width() == 50){
+            $("#menu").animate({width: '250px'},300);
+            $("#body_internal_div").animate({left:'20%'},300);
+            $("#community_header_div").animate({'padding-left':'250px'},300);
+         } else{
+            $("#menu").animate({width: '50px'},300);
+            $("#body_internal_div").animate({left:'14%'},300);
+            $("#community_header_div").animate({'padding-left':'100px'},300);
+         }
+      });
+   });
+</script>
+</html>

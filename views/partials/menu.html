@@ -9,14 +9,14 @@
     <div class="menu-item active" id="profile_button_left"><i class="fa fa-user"></i><span>Home</span></div>
     <div class="menu-item" id="add_user_button_left"><i class="fa fa-plus-square"></i><span>Add User</span></div>
     <div class="menu-item" id="user_list_button"><i class="fa fa-list-ul"></i><span>Users List</span></div>
-    <div class="menu-item" id="community_list_button"><i class="fa fa-list-alt"></i><span>Community List</span></div>
+    <div class="menu-item" id="community_list_button"><i class="fa fa-group"></i><span>Community List</span></div>
     <div class="menu-item" id="switch_user_button"><i class="fa fa-toggle-off"></i><span>Switch As User</span></div>
     <div class="menu-item" id="tag_panel_button"><i class="fa fa-tags"></i><span>Tag Panel</span></div>
     <div class="menu-item" id="change_password_button"><i class="fa fa-lock"></i><span>Change Password</span></div>
     <div class="menu-item" id="logout_button"><i class="fa fa-sign-out"></i><span>Logout</span></div>
 </div>
-<script>
-
+<script> 
+    var roleFlag = 1, roleStr = "Switch As User";
     var profile_button = document.getElementById("profile_button");
     
     //Buttons on Left Navigation Drawer
@@ -29,7 +29,7 @@
     var change_password_button = document.getElementById('change_password_button');
     var logout_button = document.getElementById('logout_button');
 
-    if("<%=data[0].role%>" == 'admin'){
+    if("<%=data[0].role%>" == 'admin' || "<%=data[0].role%>" == 'superadmin'){
         profile_button.addEventListener("click",function(event){
             window.location = '/profile'
         })
@@ -57,32 +57,41 @@
         community_list_button.addEventListener('click',function(){
             window.location = '/community/communityList';
         });
-    }
 
-    switch_user_button.addEventListener("click",function(){
-        $.confirm({
-            title: 'Switch As User',
-            boxWidth: '25%',
-            theme: 'material',
-            // backgroundDismissAnimation: 'random',
-            useBootstrap: false,
-            content: 'Do you really want switch state...',
-            buttons: {
-                Yes: {
-                    btnClass: 'btn-green',
-                    action: function(){
-
-                    }
-                },
-                No: {
-                    btnClass: 'btn-red',
-                    action: function(){
-
+        switch_user_button.addEventListener("click",function(){
+            $.confirm({
+                title: roleStr,
+                boxWidth: '25%',
+                theme: 'material',
+                // backgroundDismissAnimation: 'random',
+                useBootstrap: false,
+                content: 'Do you really want switch state...',
+                buttons: {
+                    Yes: {
+                        btnClass: 'btn-green',
+                        action: function(){
+                            if(roleFlag) {
+                                roleStr = "Switch As Admin";
+                                roleFlag = 0;
+                                window.location = '/community/communitypanel';
+                            } else {
+                                $("#add_user_button_left").css("display", "block");
+                                $("#user_list_button").css("display", "block");
+                                $("#tag_panel_button").css("display", "block");
+                                roleStr = "Switch As User";
+                                roleFlag = 1;
+                            }
+                        }
+                    },
+                    No: {
+                        btnClass: 'btn-red',
+                        action: function(){
+                        }
                     }
                 }
-            }
-        });
-    })
+            });
+        })
+    }
 
     logout_button.addEventListener("click",function(event){
         $.confirm({
@@ -132,4 +141,30 @@
             alert('Hello I am community button');
         });
     }
+
+    if("<%=data[0].role%>" == 'communitybuilder'){
+        $("#role_on_top").remove();
+            $("#add_user_button_left").remove();
+            $("#user_list_button").remove();
+            $("#switch_user_button").remove();
+            $("#tag_panel_button").remove();
+        change_password_button.addEventListener('click',function(event){
+            window.location = '/changePassword';
+        });
+
+        profile_button.addEventListener("click",function(event){
+            window.location = '/profile'
+        })
+
+        profile_button_left.addEventListener("click",function(event){
+            window.location = '/profile'
+        });
+
+        community_list_button.addEventListener('click',function(){
+            // window.location = '/community/communityList';
+            alert('Hello I am community Panel button');
+        });
+        
+    }
+
 </script>

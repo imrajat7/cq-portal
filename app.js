@@ -255,6 +255,22 @@ app.get('/community/communityList',function(req,res){
     }
 });
 
+app.get('/community/communitypanel',function(req,res){
+    if(req.session.isLogin){
+        res.render('communitypanel',{data: req.session.data});
+    } else {
+        res.redirect('/');
+    }
+});
+
+app.get('/community/AddCommunity',function(req,res){
+    if(req.session.isLogin){
+        res.render('addcommunity',{data: req.session.data});
+    } else {
+        res.redirect('/');
+    }
+})
+
 app.get('/tag/tagslist',function(req,res){
     if(req.session.isLogin){
         tagdetails.find({}).exec(function(error, data) {
