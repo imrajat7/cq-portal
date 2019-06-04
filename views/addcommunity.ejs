@@ -144,13 +144,13 @@
         h2 {
             margin: 0;
         }
-        #textInput {
+        #community_name_input {
             width: 100%;
             border-radius: 3px;
             padding: 8px; 
             margin-bottom: 2%;
         }
-        textarea {
+        #description_text_area {
             margin-top: 2%;
             width: 100%;
             border-radius: 2px;
@@ -158,16 +158,17 @@
         }
         .radio {
             display: inline;
+            margin-bottom: 10px;
         }
-        #upload {
-            margin-top: 2%;
+        #upload_button {
+            margin-top: 1%;
             margin-left: 2%;
             background-color: #fab448;
             height: 30px;
             border: none;
             color: #fff;
         }
-        #create {
+        #create_community_button {
             margin-top: 4%;
             background-color: #3598d9;
             height: 30px;
@@ -188,21 +189,34 @@
         <div class="content">
             <h2>Create Community</h2>
             <br>
-            <input type="text" id="textInput" placeholder="Name">
+            <input type="text" id="community_name_input" placeholder="Name">
             <br>
             <label>Description</label>
             <br>
-            <textarea id="textArea"></textarea>
+            <textarea id="description_text_area"></textarea>
             <br>
-            <lebel class="radio">Rule: </lebel>
-            <input type="radio" class="radio" name="role">
+            <label class="radio">Rule: </lebel>
+            <input type="radio" class="radio" name="role" id="direct">
             <label class="radio">Direct: </label>
-            <input type="radio" class="radio" name="role">
+            <input type="radio" class="radio" name="role" id="permission">
             <label class="radio">Permisson</label>
             <br>
-            <button id="upload">Upload Image</button>
+            <div id="uploadbutton">
+                    <form method="POST" action="/upload" enctype="multipart/form-data">
+                        <div class="text-center">
+                            <%= typeof msg != 'undefined' ? msg : '' %>
+                        </div>
+                        <div class="form-group upload-area">
+                            <label for="exampleFormControlFile1">Click Here To upload Files</label>
+                            <input type="file" name="files" class="form-control-file" id="exampleFormControlFile1">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="buttons" id="upload_button">Upload</button>
+                        </div>
+                    </form>
+                </div>
             <br>
-            <button id="create">Create Community</button>
+            <button id="create_community_button">Create Community</button>
         </div>
     </div>
 </body>
@@ -218,6 +232,40 @@
     }
     var create=document.getElementById("createCommunity");
     div[2].classList.add("active");
+
+    var create_community_button = document.getElementById('create_community_button');
+
+    create_community_button.addEventListener('click',function(){
+        var date = new Date();
+        var communityname = document.getElementById("community_name_input").value;
+        var descriptiontextarea = document.getElementById("description_text_area").value;
+        var newcommunity = new Object();
+        newcommunity.communityname = communityname;
+        newcommunity.descriptiontextarea = descriptiontextarea;
+        newcommunity.createdate = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
+        if(document.getElementById('direct').checked) {
+            newcommunity.membershiprule = "Direct";
+        }else if(document.getElementById('permission').checked) {
+            newcommunity.membershiprule = "Permission";
+        }
+        var request = new XMLHttpRequest();
+        request.open('POST','/community/AddCommunity');
+        request.setRequestHeader('Content-Type','application/json');
+        request.send(JSON.stringify(newcommunity));
+        request.onload = function(){
+            var dataReturned = request.responseText;
+            if(dataReturned==""||dataReturned==null){
+            alert('Error in Adding Details!!!');
+            window.location = '/community/AddCommunity';
+            }
+            else{
+                console.log(dataReturned);
+                alert('Community added correctly');
+                window.location = '/community/AddCommunity';
+            }
+        }
+    });
+
 
     
     $(document).ready(function(){
@@ -235,7 +283,7 @@
    });
     $(document).ready(function() {
         $.trumbowyg.svgPath = "/trumbowyg.svg"
-        $("#textArea").trumbowyg();
+        $("#description_text_area").trumbowyg();
     });
     </script>
 </html>

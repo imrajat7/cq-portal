@@ -80,9 +80,21 @@ var tagSchema = mongoose.Schema({
 	flag: String
 });
 
+var communitySchema = mongoose.Schema({
+    communityname: String,
+    communitydescription: String,
+    membershiprule: String,
+    communitylocation: String,
+    communityowner: String,
+    createdate: String,
+    communityimage: String,
+})
+
 var userdetails = mongoose.model("userdetails", userSchema);
 
 var tagdetails = mongoose.model('tagdetails',tagSchema );
+
+var communitydetails = mongoose.model("communitydetails",communitySchema);
 
 app.get('/auth/github',
   passport.authenticate('github'));
@@ -140,6 +152,22 @@ app.get('/auth/github/callback',
     });
 });
 
+function sanitizeFile(file, cb) {
+    // Define the allowed extension
+    let fileExts = ['png', 'jpg', 'jpeg', 'gif']
+    // Check allowed extensions
+    let isAllowedExt = fileExts.includes(file.originalname.split('.')[1].toLowerCase());
+    // Mime type must be an image
+    let isAllowedMimeType = file.mimetype.startsWith("image/")
+    if(isAllowedExt && isAllowedMimeType){
+        return cb(null ,true) // no errors
+    }
+    else{
+        // pass error msg to callback, which can be displaye in frontend
+        cb('Error: File type not allowed!')
+    }
+}
+
 const storage = multer.diskStorage({
     destination: './public/uploads',
     filename: function (req, file, cb) {
@@ -177,22 +205,6 @@ app.post('/upload', (req, res) => {
 
     })
 })
-
-function sanitizeFile(file, cb) {
-    // Define the allowed extension
-    let fileExts = ['png', 'jpg', 'jpeg', 'gif']
-    // Check allowed extensions
-    let isAllowedExt = fileExts.includes(file.originalname.split('.')[1].toLowerCase());
-    // Mime type must be an image
-    let isAllowedMimeType = file.mimetype.startsWith("image/")
-    if(isAllowedExt && isAllowedMimeType){
-        return cb(null ,true) // no errors
-    }
-    else{
-        // pass error msg to callback, which can be displaye in frontend
-        cb('Error: File type not allowed!')
-    }
-}
 
 app.post('/login',function(req,res){
     console.log(req.body);
@@ -425,6 +437,28 @@ app.post('/tag',function(req,res){
         console.error(err)
         res.send(error)
     })
+})
+
+app.post('/community/AddCommunity',function(req,res){
+    console.log(req.body);
+    let newCommunity = new communitydetails({
+        communityname: req.body.communityname,
+        communitydescription: req.body.communitydescription,
+        membershiprule: req.body.membershiprule,
+        communitylocation: req.session.data[0].city,
+        communityowner: req.session.data[0].name,
+        createdate: req.session.createdate,
+        communityimage: 'default.png',
+    })
+    newCommunity.save()
+     .then(data => {
+       console.log(data)
+       res.send(data)
+     })
+     .catch(err => {
+       console.error(err)
+       res.send(error)
+     })
 })
   
 
