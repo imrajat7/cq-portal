@@ -71,6 +71,9 @@
                         btnClass: 'btn-green',
                         action: function(){
                             if(roleFlag) {
+                                $("#add_user_button_left").css("display", "none");
+                                $("#user_list_button").css("display", "none");
+                                $("#tag_panel_button").css("display", "none");
                                 roleStr = "Switch As Admin";
                                 roleFlag = 0;
                                 window.location = '/community/communitypanel';
@@ -161,8 +164,7 @@
         });
 
         community_list_button.addEventListener('click',function(){
-            // window.location = '/community/communityList';
-            alert('Hello I am community Panel button');
+            window.location = '/community/communitypanel';
         });
         
     }

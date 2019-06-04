@@ -82,12 +82,16 @@ var tagSchema = mongoose.Schema({
 
 var communitySchema = mongoose.Schema({
     communityname: String,
+    communityemail: String,
     communitydescription: String,
     membershiprule: String,
     communitylocation: String,
     communityowner: String,
+    communityownerid: String,
     createdate: String,
     communityimage: String,
+    communitystatus: String,
+    communitymembers: String,
 })
 
 var userdetails = mongoose.model("userdetails", userSchema);
@@ -152,22 +156,6 @@ app.get('/auth/github/callback',
     });
 });
 
-function sanitizeFile(file, cb) {
-    // Define the allowed extension
-    let fileExts = ['png', 'jpg', 'jpeg', 'gif']
-    // Check allowed extensions
-    let isAllowedExt = fileExts.includes(file.originalname.split('.')[1].toLowerCase());
-    // Mime type must be an image
-    let isAllowedMimeType = file.mimetype.startsWith("image/")
-    if(isAllowedExt && isAllowedMimeType){
-        return cb(null ,true) // no errors
-    }
-    else{
-        // pass error msg to callback, which can be displaye in frontend
-        cb('Error: File type not allowed!')
-    }
-}
-
 const storage = multer.diskStorage({
     destination: './public/uploads',
     filename: function (req, file, cb) {
@@ -196,7 +184,6 @@ app.post('/upload', (req, res) => {
             // If file is not selected
             if (req.file == undefined) {
                 res.render('editprofile', { msg: 'No file selected!' })
-
             }
             else{
                 res.render('editprofile',{data: req.session.data})
@@ -205,6 +192,22 @@ app.post('/upload', (req, res) => {
 
     })
 })
+
+function sanitizeFile(file, cb) {
+    // Define the allowed extension
+    let fileExts = ['png', 'jpg', 'jpeg', 'gif']
+    // Check allowed extensions
+    let isAllowedExt = fileExts.includes(file.originalname.split('.')[1].toLowerCase());
+    // Mime type must be an image
+    let isAllowedMimeType = file.mimetype.startsWith("image/")
+    if(isAllowedExt && isAllowedMimeType){
+        return cb(null ,true) // no errors
+    }
+    else{
+        // pass error msg to callback, which can be displaye in frontend
+        cb('Error: File type not allowed!')
+    }
+}
 
 app.post('/login',function(req,res){
     console.log(req.body);
@@ -261,7 +264,9 @@ app.get('/tag',function(req,res){
 
 app.get('/community/communityList',function(req,res){
     if(req.session.isLogin){
-        res.render('communitylist',{data: req.session.data});
+        communitydetails.find({}).exec(function(error, data) {
+			res.render('communitylist', {communitydata: data,data: req.session.data});
+		});
     }else{
         res.redirect('/')
     }
@@ -282,6 +287,17 @@ app.get('/community/AddCommunity',function(req,res){
         res.redirect('/');
     }
 })
+
+app.get('/community/list',function(req,res){
+    if(req.session.isLogin){
+        communitydetails.find({}).exec(function(error, data) {
+			res.render('commlist', {communitydata: data,data: req.session.data});
+		});
+    } else {
+        res.redirect('/');
+    }
+})
+
 
 app.get('/tag/tagslist',function(req,res){
     if(req.session.isLogin){
@@ -393,7 +409,7 @@ app.post('/admin/adduser',function (req, res) {
         role: req.body.role,
         status: req.body.status,
         flag: req.body.flag,
-        image: '/uploads/default.png'
+        image: 'default.png'
     })
     newUser.save()
      .then(data => {
@@ -443,12 +459,16 @@ app.post('/community/AddCommunity',function(req,res){
     console.log(req.body);
     let newCommunity = new communitydetails({
         communityname: req.body.communityname,
-        communitydescription: req.body.communitydescription,
+        communityemail: req.session.data[0].email,
+        communitydescription: req.body.description,
         membershiprule: req.body.membershiprule,
         communitylocation: req.session.data[0].city,
         communityowner: req.session.data[0].name,
-        createdate: req.session.createdate,
-        communityimage: 'default.png',
+        communityownerid: req.session.data[0]._id,
+        createdate: req.body.createdate,
+        communityimage: 'defaultcommunity.jpg',
+        communitystatus: 'active',
+        communitymembers: '0',
     })
     newCommunity.save()
      .then(data => {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Commuinity Panel</title>
+    <title>Community List</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -106,7 +106,6 @@
             background-color: #3ea7c1;
             line-height: 50px;
         }
-
         #body_internal_div{
             padding:0;
             margin:0;
@@ -115,9 +114,6 @@
             top: 20%;
             width: 72%;
             border: 1px solid #eeeeee;
-            background-color: #fff;
-            box-shadow: 0px 1px 10px 0px rgb(201, 201, 201);
-            padding-bottom: 20px;
         }
         .btn{
             background: transparent;
@@ -133,44 +129,34 @@
             margin: 5px;
             display: block;
         }
-        #body_internal_header_div{
-            background-color: #3ea7c1;
-            line-height: 50px;
-            font-size: 16px;
-            color: #fff;
-            padding-left: 20px;
-        }
-        #create_button{
+        #search_input{
+            display: block;
+            width: 30%;
+            height: 34px;
+            margin-top: 8px;
+            margin-right: 70px;
             float: right;
-            display: inline-block;
-            padding: 6px 12px;
-            margin-bottom: 0;
             font-size: 14px;
-            font-weight: 400;
             line-height: 1.42857143;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: middle;
-            background: transparent;
-            border: 1px solid #fff;
-            color: #fff;
-            cursor: pointer;
-            margin: 10px 10px;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        .my_community_div_class{
+        .community_div_class{
             padding:0;
             margin: 0;
-            width: 100%;
             background-color: #fff;
-            padding: 5px;
-            border-top: 1px solid rgb(200,200,200);
-            border-bottom: 1px solid rgb(200,200,200);
-            margin-top: 12px;
-            float: left;
+            padding: 15px;
+            padding-bottom: 120px;
+            border: 1px solid rgb(200,200,200);
+            border-radius: 5px;
+            margin-top: 3px;
         }
         .community_image_div_class{
             width: 15%;
-            float: left;
+            float:left;
         }
         .community_image_class{
             height: 70px;
@@ -181,32 +167,57 @@
             color: #333;
             background-color: #fff;
         }
-        .community_name_div{
-            padding: 0;
-            margin: 0;
-            margin-top: 25px;
-            color: #337ab7;;
-            font-weight: 600;
-            text-decoration: none;
+        .community_name_div_class{
+            border: 0;
+            font-weight: bold;
             word-wrap: break-word;
-            text-transform: capitalize;
+            font-size: 17px;
+            padding: 12px 0 0 0;
+            outline: none !important;
+            background-color: rgba(0, 0, 0, 0);
+            width: 30%;
             float: left;
+        }
+        .joinbtn{
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-radius: 3px;
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
             font-size: 14px;
+            font-weight: 400;
             line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+            border: 0px;
+            float: right;
+            margin-top: 15px;
             margin-right: 20px;
         }
-        .community_members_div{
+        .community_lower_div_class{
+            width: 100%;
+            float: left;
             padding: 0;
             margin: 0;
-            margin-top: 25px;
-            color: #337ab7;;
             font-weight: 600;
+            color: #7D7D7D;
             text-decoration: none;
             word-wrap: break-word;
             text-transform: capitalize;
-            font-size: 14px;
-            line-height: 1.42857143;
-            font-weight: 100;
+        }
+        .description_div_class{
+            border: 0;
+            word-wrap: break-word;
+            font-size: 12px;
+            color: rgb(170, 170, 170);
+            outline: none !important;
+            background-color: rgba(0, 0, 0, 0)
         }
     </style>
 </head>
@@ -215,18 +226,28 @@
     <div id="community_header_div">
         <button class="btn" id="my_communities_button"><i class="fa fa-group"></i></button>
         <button class="btn" id="community_search_button"><i class="fa fa-search"></i></button>
+        <input type="text" id="search_input" placeholder="Search Community...">
     </div>
     <div id="body_internal_div">
-        <div id="body_internal_header_div">
-            My Communities
-            <button id="create_button">Create</button>
+        <%communitydata.forEach(d => {%>
+        <div class="community_div_class">
+            <div class="community_upper_div">
+                <div class="community_image_div_class"><img src="/images/<%=d.communityimage%>" class="community_image_class"></div>
+                <div class="community_name_div_class"><a href="#"><%=d.communityname%></a></div>
+                <button id="join_button" class="joinbtn">
+                        <% if(d.membershiprule == "direct"){ %>
+                            Join
+                        <% } else{ %>  
+                            Ask To Join
+                        <% } %>
+                </button>
+            </div>
+            <div class="community_lower_div_class">
+                <div class="members_div_class"><%=d.communitymembers%> members</div>
+                <div class="description_div_class"><%=d.communitydescription%></div>
+            </div>
         </div>
-        <div class="my_community_div_class">
-                <div class="community_image_div_class"><img src="/images/defaultcommunity.jpg" class="community_image_class"></div>
-                <div class="community_name_div"><a></a>Community Name</div>
-                <div class="community_members_div">Members(3)</div>
-
-        </div>
+        <%})%>
     </div>
 </body>
 <script>
@@ -242,21 +263,15 @@
     div[2].classList.add("active");
 
     var community_header_div = document.getElementById("community_header_div");
-    var create_button = document.getElementById("create_button");
     var my_communities_button = document.getElementById("my_communities_button");
     var community_search_button = document.getElementById("community_search_button");
-
-
-    create_button.addEventListener("click",function(){
-        window.location = '/community/AddCommunity'
-    });
 
     my_communities_button.addEventListener('click',function(){
         window.location = '/community/communitypanel'
     });
 
     community_search_button.addEventListener('click',function(){
-        window.location = '/community/list';
+        window.location = '/community/list'
     });
 
     

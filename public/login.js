@@ -31,6 +31,8 @@ loginBtn.addEventListener('click',function(event){
                 window.location = "editprofile"
                 else if(dataReturned[0].role === 'user')
                 window.location = "/profile";
+                else if(dataReturned[0].role === 'communitybuilder')
+                window.location = "/community/communitypanel";
             }
         }
     }

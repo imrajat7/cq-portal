@@ -182,8 +182,8 @@
 <body>
     <% include partials/menu.html %>
     <div id="community_header_div">
-        <button class="btn"><i class="fa fa-group"></i></button>
-        <button class="btn"><i class="fa fa-search"></i></button>
+        <button class="btn" id="my_communities_button"><i class="fa fa-group"></i></button>
+        <button class="btn" id="community_search_button"><i class="fa fa-search"></i></button>
     </div>
     <div id="body_internal_div">
         <div class="content">
@@ -234,6 +234,17 @@
     div[2].classList.add("active");
 
     var create_community_button = document.getElementById('create_community_button');
+    var my_communities_button = document.getElementById("my_communities_button");
+    var community_search_button = document.getElementById("community_search_button");
+
+    my_communities_button.addEventListener('click',function(){
+        window.location = '/community/communitypanel'
+    });
+
+    community_search_button.addEventListener('click',function(){
+        window.location = '/community/list';
+    });
+
 
     create_community_button.addEventListener('click',function(){
         var date = new Date();
@@ -241,12 +252,12 @@
         var descriptiontextarea = document.getElementById("description_text_area").value;
         var newcommunity = new Object();
         newcommunity.communityname = communityname;
-        newcommunity.descriptiontextarea = descriptiontextarea;
+        newcommunity.description = descriptiontextarea;
         newcommunity.createdate = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
         if(document.getElementById('direct').checked) {
-            newcommunity.membershiprule = "Direct";
+            newcommunity.membershiprule = "direct";
         }else if(document.getElementById('permission').checked) {
-            newcommunity.membershiprule = "Permission";
+            newcommunity.membershiprule = "permission";
         }
         var request = new XMLHttpRequest();
         request.open('POST','/community/AddCommunity');

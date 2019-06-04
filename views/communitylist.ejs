@@ -175,6 +175,16 @@
 			margin: 0;
 			box-sizing: initial;
 		}
+		#communityimage{
+			border: 4px solid green;
+		}
+		.actions i {
+			background-color: #000;
+			font-size: 16px;
+			text-align: center;
+			padding: 6px;
+			cursor: pointer;
+		}
     </style>
 </head>
 <body>
@@ -299,14 +309,23 @@
                         <th>Membership Rule</th>
                         <th>Community Location</th>
                         <th>Community Owner</th>
-                        <th>Community Owner</th>
                         <th>Create Date</th>
                         <th>Actions</th>
                         <th>Community Pic</th>
                     </tr>
                 </thead>
                 <tbody>
-
+										<%communitydata.forEach(function(d) { %>
+											<tr>
+											<td><%=d.communityname%></td>
+											<td><%=d.membershiprule%></td>
+											<td><%=d.communitylocation%></td>
+											<td><%=d.communityowner%></td>
+											<td><%=d.createdate%></td>
+											<td class="actions"></td>
+											<td><img src="/images/<%=d.communityimage%>" width="100" height="100" id="communityimage"></td>
+										</tr>
+										<%})%>
                 </tbody>
         </table>
     </div>
@@ -330,7 +349,17 @@
             $("#body_div").animate({left:'50px'},300);
          }
       });
-   });
+	 });
+	 
+	 var actionBtns = document.getElementsByClassName("actions");
+	for(var i = 0;i<actionBtns.length;i++) {
+		var editBtn = document.createElement("i");
+		editBtn.classList.add("fa", "fa-edit");
+		actionBtns[i].appendChild(editBtn);
+		var infoBtn = document.createElement("i");
+		infoBtn.classList.add("fa", "fa-info");
+		actionBtns[i].appendChild(infoBtn);
+	}
 
 </script>
 </html>
