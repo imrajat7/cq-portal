@@ -298,6 +298,22 @@ app.get('/community/list',function(req,res){
     }
 })
 
+app.get('/community/communityprofile/:id',function(req,res){
+    if(req.session.isLogin){
+        // communitydetails.find({}).exec(function(error, data) {
+		// 	res.render('commlist', {communitydata: data,data: req.session.data});
+        // });
+        communitydetails.find({
+            _id: req.params.id,
+        }).exec(function(error,data){
+            console.log(data);
+            res.render('communityprofile', {communitydata: data,data: req.session.data});
+        });
+    } else {
+        res.redirect('/');
+    }
+})
+
 
 app.get('/tag/tagslist',function(req,res){
     if(req.session.isLogin){

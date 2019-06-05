@@ -102,87 +102,109 @@
             position: absolute;
             top:60px;
             width: 100%;
-            padding-left: 100px;
+            height: 45px;
             background-color: #3ea7c1;
             line-height: 50px;
         }
         #body_internal_div{
             padding:0;
             margin:0;
+            padding: 10px;
             position: absolute;
-            left: 14%;
-            top: 20%;
-            width: 72%;
-            border: 1px solid #eeeeee;
+            left: 10%;
+            top: 25%;
+            width: 80%;
+            border-top: 1px solid #eeeeee;
         }
         .btn{
             background: transparent;
             border: 1px solid #fff;
-            width: 50px;
+            padding: 8px;
             color: #fff;
             cursor: pointer;
-            margin-left: 10px;
-            margin-top: 2px;
+            margin-top: 5px;
+            margin-right: 200px;
         }
-        #community_header_div button i {
-            padding: 0;
-            margin: 5px;
-            display: block;
-        }
-        #search_input{
-            display: block;
-            width: 30%;
-            height: 34px;
-            margin-top: 8px;
-            margin-right: 70px;
+        #permission_button{
             float: right;
-            font-size: 14px;
-            line-height: 1.42857143;
-            color: #555;
-            background-color: #fff;
-            background-image: none;
-            border: 1px solid #ccc;
-            border-radius: 4px;
         }
-        .community_div_class{
+        #community_image_div{
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            z-index: 999999999;
+        }
+        #community_image{
+            width: 100px;
+            height: 100px;
+            margin-left: 220px;
+            border: 4px solid #fff;
+            margin-top: 20px;
+        }
+        #community_name_div{
             padding:0;
-            margin: 0;
-            background-color: #fff;
-            padding: 15px;
-            padding-bottom: 120px;
-            border: 1px solid rgb(200,200,200);
-            border-radius: 5px;
-            margin-top: 3px;
-        }
-        .community_image_div_class{
-            width: 15%;
-            float:left;
-        }
-        .community_image_class{
-            height: 70px;
-            width: 70px;
-            border: 3px solid rgb(235, 235, 235);
-            font-size: 14px;
-            line-height: 1.42857143;
-            color: #333;
-            background-color: #fff;
-        }
-        .community_name_div_class{
-            border: 0;
+            margin:0;
+            position: absolute;
+            left: 30%;
+            top: 70%;
+            overflow: auto;
+            z-index: 1;
+            height: 60px;
+            margin-top: 15px;
+            font-size: 20px;
+            font-family: 'Open Sans', sans-serif;
+            /* color: #838686; */
+            text-transform: capitalize;
             font-weight: bold;
-            word-wrap: break-word;
-            font-size: 17px;
-            padding: 12px 0 0 0;
-            outline: none !important;
-            background-color: rgba(0, 0, 0, 0);
-            width: 30%;
-            float: left;
         }
-        .joinbtn{
-            padding: 5px 10px;
-            font-size: 12px;
-            line-height: 1.5;
-            border-radius: 3px;
+        #members_div{
+            padding:0;
+            margin:0;
+            width: 25%;
+            height: 80px;
+            float: left;
+            border: 1px solid rgb(200,200,200);
+            background: #fff;
+        }
+        #about_community_div{
+            width: 50%;
+            height: 150px;
+            margin-left: 35%;
+            border: 1px solid rgb(200,200,200);
+            background-color: #fff;
+        }
+        #managers_div{
+            width: 25%;
+            height: 120px;
+            border: 1px solid rgb(200,200,200);
+        }
+        #about_community_upper_div{
+            padding: 10px 15px;
+            background-color: rgb(220,220,220);
+            text-align: center;
+            color: #333;
+            font-size: 15px;
+            font-weight: 200;
+        }
+        #about_community_lower_div{
+            background-color: #fff;
+            color: #333;
+            font-size: 13px;
+            text-align: center;
+        }
+        #members_upper_div{
+            text-align: center;
+            color: #333;
+            height: 60%;
+            font-size: 15px;
+            font-weight: 200;
+            background: #fff;
+        }
+        #permission_button_1{
+            margin-top:5px;
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
             display: inline-block;
             padding: 6px 12px;
             margin-bottom: 0;
@@ -192,62 +214,85 @@
             text-align: center;
             white-space: nowrap;
             vertical-align: middle;
-            color: #fff;
-            background-color: #337ab7;
-            border-color: #2e6da4;
-            border: 0px;
-            float: right;
-            margin-top: 15px;
-            margin-right: 20px;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
         }
-        .community_lower_div_class{
-            width: 100%;
-            float: left;
-            padding: 0;
-            margin: 0;
-            font-weight: 600;
-            color: #7D7D7D;
-            text-decoration: none;
-            word-wrap: break-word;
-            text-transform: capitalize;
+        #members_lower_div{
+            height: 40%;
+            background: rgb(220,220,220);
+            text-align: center;
+            padding-top: 5px;
         }
-        .description_div_class{
-            border: 0;
-            word-wrap: break-word;
-            font-size: 12px;
-            color: rgb(170, 170, 170);
-            outline: none !important;
-            background-color: rgba(0, 0, 0, 0)
+        #managers_top_div{
+            height: 25%;
+            background-color: rgb(220,220,220);
+            text-align: center;
+            color: #333;
+            font-size: 15px;
+            font-weight: 200;
+            padding-top: 5px;
+        }
+        #managers_lower_div{
+            height: 75%;
+            background: #fff;
+            padding: 8px;
+        }
+        #manager_image{
+            width: 70px;
+            height: 70px;
+            margin: 5px;
+            border-radius: 50%;
+            float:left;
+            margin-right: 30px;
         }
     </style>
 </head>
 <body>
     <% include partials/menu.html %>
     <div id="community_header_div">
-        <button class="btn" id="my_communities_button"><i class="fa fa-group"></i></button>
-        <button class="btn" id="community_search_button"><i class="fa fa-search"></i></button>
-        <input type="text" id="search_input" placeholder="Search Community...">
+        <div id="community_image_div"><img src="/images/<%=communitydata[0].communityimage%>" id="community_image"></div>
+        <button class="btn" id="permission_button">
+                <% if(communitydata[0].membershiprule == "direct"){ %>
+                    Join
+                <% } else{ %>  
+                    Ask To Join
+                <% } %>
+        </button>
+        <div id="community_name_div"><%=communitydata[0].communityname%></div>
     </div>
     <div id="body_internal_div">
-        <%communitydata.forEach(d => {%>
-        <div class="community_div_class">
-            <div class="community_upper_div">
-                <div class="community_image_div_class"><img src="/images/<%=d.communityimage%>" class="community_image_class"></div>
-                <div class="community_name_div_class"><a href="/community/communityprofile/<%=d._id%>" id="<%=d.communityname%>"><%=d.communityname%></a></div>
-                <button id="join_button" class="joinbtn" id="<%=d._id%>">
-                        <% if(d.membershiprule == "direct"){ %>
-                            Join
-                        <% } else{ %>  
-                            Ask To Join
-                        <% } %>
-                </button>
-            </div>
-            <div class="community_lower_div_class">
-                <div class="members_div_class"><%=d.communitymembers%> members</div>
-                <div class="description_div_class"><%=d.communitydescription%></div>
+        <div id="members_div">
+                <div id="members_upper_div">
+                        <button id="permission_button_1">
+                                <% if(communitydata[0].membershiprule == "direct"){ %>
+                                    Join
+                                <% } else{ %>  
+                                    Ask To Join
+                                <% } %>
+                        </button>
+                </div>
+                <div id="members_lower_div"><%=communitydata[0].communitymembers%> Members</div>
+        </div>
+        <div id="about_community_div">
+            <div id="about_community_upper_div"> About Community</div>
+            <div id="about_community_lower_div"><%=communitydata[0].communitydescription%></div>
+        </div>
+        <div id="managers_div">
+            <div id="managers_top_div">Community Managers</div>
+            <div id="managers_lower_div">
+                <img src="/images/default.png" id="manager_image">
+                <span style="background: #5cb85c" id="role_manager">owner</span>
+                <span style="background: #f0ad4e"><%= data[0].role%></span>
             </div>
         </div>
-        <%})%>
     </div>
 </body>
 <script>
@@ -261,18 +306,6 @@
     }
     var create=document.getElementById("createCommunity");
     div[2].classList.add("active");
-
-    var community_header_div = document.getElementById("community_header_div");
-    var my_communities_button = document.getElementById("my_communities_button");
-    var community_search_button = document.getElementById("community_search_button");
-
-    my_communities_button.addEventListener('click',function(){
-        window.location = '/community/communitypanel'
-    });
-
-    community_search_button.addEventListener('click',function(){
-        window.location = '/community/list'
-    });
 
     
     $(document).ready(function(){
