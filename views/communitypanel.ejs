@@ -228,12 +228,13 @@
             My Communities
             <button id="create_button">Create</button>
         </div>
+        <% communitydata.forEach(d => { %>
         <div class="my_community_div_class">
-                <div class="community_image_div_class"><img src="/images/defaultcommunity.jpg" class="community_image_class"></div>
-                <div class="community_name_div"><a class="links" href="#">Community Name</a></div>
-                <div class="community_members_div"><a class="linkss" href="#">Members(3)</a></div>
-
+            <div class="community_image_div_class"><img src="/images/<%=d.communityimage%>" class="community_image_class"></div>
+            <div class="community_name_div"><a class="links" href="#"><%=d.communityname%></a></div>
+            <div class="community_members_div"><a class="linkss" href="#">Members(3)</a></div>
         </div>
+        <% })%>
     </div>
 </body>
 <script>

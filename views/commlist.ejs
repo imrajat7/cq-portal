@@ -233,8 +233,8 @@
         <div class="community_div_class">
             <div class="community_upper_div">
                 <div class="community_image_div_class"><img src="/images/<%=d.communityimage%>" class="community_image_class"></div>
-                <div class="community_name_div_class"><a href="/community/communityprofile/<%=d._id%>" id="<%=d.communityname%>"><%=d.communityname%></a></div>
-                <button id="join_button" class="joinbtn" id="<%=d._id%>">
+                <div class="community_name_div_class"><a href="/community/communityprofile/<%=d._id%>"><%=d.communityname%></a></div>
+                <button class="joinbtn" id="<%=d._id%>">
                         <% if(d.membershiprule == "direct"){ %>
                             Join
                         <% } else{ %>  
@@ -253,9 +253,10 @@
 <script>
     var menu = document.getElementById("menu");
     var sideBtn = document.getElementById("sideBtn");
-    var body_internal_div = document.getElementById("outer-body-div1");
+    var body_internal_div = document.getElementById("body_internal_div");
     var span = menu.getElementsByTagName("span");
     var div = menu.getElementsByTagName('div');
+    var communitydata = <%-JSON.stringify(communitydata)%>;
     for(var i=0;i<div.length;i++){
         div[i].classList.remove("active");
     }
@@ -265,6 +266,9 @@
     var community_header_div = document.getElementById("community_header_div");
     var my_communities_button = document.getElementById("my_communities_button");
     var community_search_button = document.getElementById("community_search_button");
+    var search_input = document.getElementById("search_input");
+    var joinbtns = document.getElementsByClassName('joinbtn');
+
 
     my_communities_button.addEventListener('click',function(){
         window.location = '/community/communitypanel'
@@ -274,7 +278,60 @@
         window.location = '/community/list'
     });
 
-    
+    search_input.addEventListener('keyup',function(){
+        body_internal_div.innerHTML = "";
+        var search_param = document.getElementById("search_input").value;
+        console.log(search_param);
+        communitydata.forEach(element=>{
+            if(element.communityname.includes(search_param)){
+                console.log(element);
+                addToDom(element);
+            }
+        })
+    });
+
+    function addToDom(element){
+        var listItem1 = document.createElement('div');
+        listItem1.setAttribute("class","community_div_class");
+        var listItem = document.createElement("div");
+        listItem.setAttribute("class","community_upper_div");
+        first_div = document.createElement('div');
+        first_div.setAttribute("class","community_image_div_class");
+        image = document.createElement('img');
+        image.setAttribute("src","/images/" + element.communityimage);
+        image.setAttribute("class","community_image_class");
+        first_div.appendChild(image);
+        listItem.appendChild(first_div);
+        second_div = document.createElement('div');
+        second_div.setAttribute("class","community_name_div_class");
+        anchor = document.createElement('a');
+        anchor.setAttribute("href","/community/communityprofile/" + element._id);
+        anchor.innerHTML = element.communityname;
+        second_div.appendChild(anchor);
+        listItem.appendChild(second_div);
+        button = document.createElement('button');
+        button.setAttribute("class","joinbtn");
+        if(element.membershiprule == "direct"){
+            button.innerHTML = "Join";
+         } else{ 
+            button.innerHTML = "Ask To Join";
+         }
+        listItem.appendChild(button);
+        listItem1.appendChild(listItem);
+        listItem2 = document.createElement('div');
+        listItem2.setAttribute("class","community_lower_div_class");
+        thirddiv = document.createElement("div");
+        thirddiv.setAttribute("class","members_div_class");
+        thirddiv.innerHTML = element.communitymembers;
+        listItem2.appendChild(thirddiv);
+        fourdiv = document.createElement('div');
+        fourdiv.setAttribute("class","desription_div_class");
+        fourdiv.innerHTML = element.communitydescription;
+        listItem2.appendChild(fourdiv);
+        listItem1.appendChild(listItem2);
+         body_internal_div.appendChild(listItem1);
+    }
+
     $(document).ready(function(){
       $("#sideBtn").click(function(){
          if($("#menu").width() == 50){
@@ -288,5 +345,30 @@
          }
       });
    });
+
+    for(var i = 0;i<joinbtns.length;i++) {
+        joinbtns[i].addEventListener("click", event => {
+            console.log(event.target.getAttribute("id"));
+            console.log(event.target.innerHTML.trim());
+            event.target.parentNode.parentNode.style.display = "none";
+            var communitytojoin = new Object();
+            communitytojoin.id = event.target.getAttribute("id");
+            communitytojoin.buttontext = event.target.innerHTML.trim();
+            var request = new XMLHttpRequest();
+            request.open('POST','/joincommunity');
+            request.setRequestHeader("Content-Type","application/json");
+            request.send(JSON.stringify(communitytojoin));
+
+            request.onload = function(){
+            var dataReturned = request.responseText;
+            if(dataReturned==""||dataReturned==null){
+            alert('Error in joining Community!!!');
+            }else{
+                console.log(dataReturned);
+                alert('Join Request Submitted!!!');
+                }
+            }
+        })
+    }
 </script>
 </html>

@@ -70,7 +70,9 @@ var userSchema = mongoose.Schema({
     role: String,
     status: String,
     flag: String,
-    image: String
+    image: String,
+    joinedcommunities: Array,
+    requestedcommunities: Array,
 });
 
 var tagSchema = mongoose.Schema({
@@ -92,6 +94,8 @@ var communitySchema = mongoose.Schema({
     communityimage: String,
     communitystatus: String,
     communitymembers: String,
+    joinedmembers: Array,
+    requestedmembers: Array,
 })
 
 var userdetails = mongoose.model("userdetails", userSchema);
@@ -274,7 +278,12 @@ app.get('/community/communityList',function(req,res){
 
 app.get('/community/communitypanel',function(req,res){
     if(req.session.isLogin){
-        res.render('communitypanel',{data: req.session.data});
+        communitydetails.find({$or: [
+			{joinedmembers: req.session.data[0]._id},
+			{requestedmembers: req.session.data[0]._id}
+		]}).then(data => {
+			res.render('communitypanel', {data: req.session.data, communitydata: data});
+		})
     } else {
         res.redirect('/');
     }
@@ -290,9 +299,10 @@ app.get('/community/AddCommunity',function(req,res){
 
 app.get('/community/list',function(req,res){
     if(req.session.isLogin){
-        communitydetails.find({}).exec(function(error, data) {
-			res.render('commlist', {communitydata: data,data: req.session.data});
-		});
+        communitydetails.find({joinedmembers: {$ne: req.session.data[0]._id},
+            requestedmembers: {$ne: req.session.data[0]._id}}).exec((error, d) => {
+           res.render('commlist', {data: req.session.data, communitydata: d});
+       })
     } else {
         res.redirect('/');
     }
@@ -313,6 +323,69 @@ app.get('/community/communityprofile/:id',function(req,res){
         res.redirect('/');
     }
 })
+
+app.post('/joincommunity',function(req,res){
+    if(req.session.isLogin){
+        if(req.body.buttontext == "Join"){
+            userdetails.findOneAndUpdate(
+                {
+                    _id: req.session.data[0]._id
+                },
+                {
+                    $push: {joinedcommunities: req.body.id}
+                },
+                {
+                    new: true,
+                    runValidators: true
+                })
+                .then(data=>{
+                    if(data == null)
+						res.send("Error")
+					else{
+                        communitydetails.findOneAndUpdate(
+							{ _id: req.body.id },
+							{$push: {joinedmembers: req.session.data[0]._id}},
+							{new: true,
+							runValidators: true}).then(data => {
+								if(data == null)
+									res.send("Error")
+								else{
+                                    res.send("Added");
+                                }
+						})
+                    }
+                })
+        } else{
+            userdetails.findOneAndUpdate(
+				{
+                    _id: req.session.data[0]._id
+                },
+				{
+                    $push: {requestedcommunities: req.body.id}
+                },
+				{
+                    new: true,
+                    runValidators: true})
+                .then(data => {
+                if(data == null)
+                    res.send("Error")
+                else{
+                    communitydetails.findOneAndUpdate(
+                        { _id: req.body.id },
+                        {$push: { requestedmembers: req.session.data[0]._id}},
+                        {new: true,
+                        runValidators: true}).then(data => {
+                            if(data == null)
+                                res.send("Error");
+                            else
+                                res.send("Added");
+                    })
+
+                }
+			})
+        }
+    }
+});
 
 
 app.get('/tag/tagslist',function(req,res){
@@ -425,7 +498,9 @@ app.post('/admin/adduser',function (req, res) {
         role: req.body.role,
         status: req.body.status,
         flag: req.body.flag,
-        image: 'default.png'
+        image: 'default.png',
+        joinedcommunities: [],
+        requestedcommunities: [],
     })
     newUser.save()
      .then(data => {
@@ -485,6 +560,8 @@ app.post('/community/AddCommunity',function(req,res){
         communityimage: 'defaultcommunity.jpg',
         communitystatus: 'active',
         communitymembers: '0',
+        joinedmembers: [],
+        requestedmembers: [],
     })
     newCommunity.save()
      .then(data => {
